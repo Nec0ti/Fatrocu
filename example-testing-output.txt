@@ -1,0 +1,56 @@
+#INPUT#
+Please provide a description of the following image: (invoice image example)
+
+#OUTPUT#
+The image is a Turkish e-Fatura (electronic invoice) document. It features a logo in the top right corner with the words "e-FATURA" underneath. The 
+document has information organized in a table format, detailing the invoice information, including:
+
+* **Invoice Details:**
+    *  **Özelleştirme No:** (Customization No): TR1.2
+    *  **Senaryo:** (Scenario): TİCARİFATURA
+    *  **Fatura Tipi:** (Invoice Type): SATIŞ
+    *  **Fatura No:** (Invoice No): GID201500000062
+    *  **Fatura Tarihi:** (Invoice Date): 24-12-2015
+    *  **İrsaliye No:** (Delivery Note No): 0000000000000058
+    *  **İrsaliye Tarihi:** (Delivery Note Date): 24-12-2015
+
+* **Invoice Items:**
+    * The table includes columns for:
+        * **Sıra No:** (Serial No)
+        * **Malzeme/Hizmet Kodu:** (Material/Service Code)
+        * **Malzeme/Hizmet Açıklaması:** (Material/Service Description)
+        * **Satır Açıklaması:** (Line Description)
+        * **Miktar:** (Quantity)
+        * **Birim Fiyat:** (Unit Price)
+        * **İskonto Oranı:** (Discount Rate)
+        * **İskonto Tutan:** (Discount Amount)
+        * **KDV Oranı:** (VAT Rate)
+        * **KDV Tutan:** (VAT Amount)
+        * **Diğer Vergiler:** (Other Taxes)
+        * **Vergi Muafıyet Sebebi:** (Tax Exemption Reason)
+        * **Malzeme/Hizmet Tutarı:** (Material/Service Total)
+
+* **Invoice Header:**
+    * **LOGO:**
+        * **BA No:1**
+        * **GEBZE/KOCAELİ**
+        * **Tel:** 02626798000
+        * **Fax:**
+        * **Web Sitesi:** logo.com.tr
+        * **E-Posta:** serraksanikaya@gmail.com
+        * **Vergi Dairesi:** KARATASAL MAL MÜDÜRLÜĞÜ
+        * **VKN:** 1234567801
+
+* **Invoice Recipient Information:**
+    * **SAYIN:**
+    * **A FİRMASI**
+    * **E-Posta:**
+    * **Tel:**
+    * **Fax:**
+    * **Vergi Dairesi:**
+    * **VKN:** 4780469628
+
+* **ETTN:** 24B733B9-B7E2-4280-980B-3C435FBF2EFC
+
+The invoice appears to be for the sale of one unit of a "KALEM" (pen) with a total cost of 1.00 TL. The invoice includes detailed information about 
+the transaction and various tax calculations.
