@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
         palette.setColor(QPalette.ToolTipText, QColor(255, 255, 255))
         palette.setColor(QPalette.Text, QColor(255, 255, 255))
         palette.setColor(QPalette.Button, QColor(53, 53, 53))
-        palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))
+        palette.setColor(QPalette.ButtonText, QColor(0, 0, 0))
         palette.setColor(QPalette.BrightText, QColor(255, 0, 0))
         palette.setColor(QPalette.Link, QColor(42, 130, 218))
         palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
