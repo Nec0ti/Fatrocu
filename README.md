@@ -1,2 +1,5 @@
-# Fatrocu
-Fatrocu is AI powered accountant.
+# About This Project
+
+# To Do
+
+# Usage
