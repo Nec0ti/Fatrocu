@@ -14,17 +14,21 @@ class MainWindow(QMainWindow):
         central_widget = QWidget()
         layout = QVBoxLayout()
         
-        self.btn_okc_fisi = QPushButton("ÖKC Fişi", self)
-        self.btn_okc_fisi.clicked.connect(lambda: self.open_directory('ÖKC Fişi'))
+        self.btn_okc_fisi = QPushButton("OKC Fisi Analiz Et & Excel'e Donustur", self)
+        self.btn_okc_fisi.clicked.connect(lambda: self.open_directory("OKC Fisi"))
         
-        self.btn_earşiv_fatura = QPushButton("Fatura", self)
-        self.btn_earşiv_fatura.clicked.connect(lambda: self.open_directory('Fatura'))
+        self.btn_earsiv_fatura = QPushButton("Fatura Analiz Et & Excel'e Donustur", self)
+        self.btn_earsiv_fatura.clicked.connect(lambda: self.open_directory('Fatura'))
+
+        self.btn_earsiv_pdf = QPushButton("PDF'i png'ye Donustur", self)
+        self.btn_earsiv_pdf.clicked.connect(lambda: self.open_directory("PDF'i png'ye Donustur"))
         
         self.log_text = QTextEdit(self)
         self.log_text.setReadOnly(True)
         
         layout.addWidget(self.btn_okc_fisi)
-        layout.addWidget(self.btn_earşiv_fatura)
+        layout.addWidget(self.btn_earsiv_fatura)
+        layout.addWidget(self.btn_earsiv_pdf)
         layout.addWidget(self.log_text)
         
         central_widget.setLayout(layout)

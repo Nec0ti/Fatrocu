@@ -42,7 +42,7 @@ model = genai.GenerativeModel(
 # TODO Make these files available on the local file system
 # You may need to update the file paths
 files = [
-  upload_to_gemini("src/ftr.jpg", mime_type="image/jpeg"),
+  upload_to_gemini("src/ftr2.jpg", mime_type="image/jpeg"),
 ]
 
 chat_session = model.start_chat(
@@ -50,6 +50,7 @@ chat_session = model.start_chat(
     {
       "role": "user",
       "parts": [
+        "bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN/TCKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani,kdv tutari, kdv orani. fotograf burda: {files[0]}",
         files[0],
       ],
     },
@@ -62,6 +63,12 @@ chat_session = model.start_chat(
   ]
 )
 
-response = chat_session.send_message("Please provide a description of the following image: {files[0]}")
+print("\nAnalyzing please wait...\n")
 
+response = chat_session.send_message("bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN/TCKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani,kdv tutari, kdv orani. fotograf burda: {files[0]}")
 print(response.text)
+
+'''
+tarih,    fatura turu(Satis/Alis),     Cari ad/aciklama,     evrak no,
+vkn/tckn,     matrah(kdv),   kdv
+'''

@@ -1,0 +1,4 @@
+tarih,    fatura turu(Satis/Alis),     Cari ad/aciklama,     evrak no, \
+vkn/tckn,     matrah(kdv),   kdv
+
+[kdv matrahi ve kdv opsiyen olarak istenilen miktarda eklenebilir orn: matrah(%20),kdv(%20),matrah(%10),kdv(%10),matrah(%1),kdv(%1)]
