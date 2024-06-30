@@ -48,7 +48,8 @@ model = genai.GenerativeModel(
 # TODO: Automaticly choose the images from computer
 files = [
   upload_to_gemini("src/ftr.jpg", mime_type="image/jpeg"),
-  # upload_to_gemini("src/ftr2.png", mime_type="image/jpeg"),
+  upload_to_gemini("src/ftr2.png", mime_type="image/png"),
+  upload_to_gemini("src/ftr3.png", mime_type="image/png"),
 ]
 
 chat_session = model.start_chat(
@@ -71,11 +72,13 @@ chat_session = model.start_chat(
 
 print("\nAnalyzing please wait...\n")
 
-response = chat_session.send_message(f"bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani(kdv orani ile ayni),kdv tutari, kdv orani. fotograf burda: {files[0]}")
+response = chat_session.send_message(f"bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani(kdv orani ile ayni),kdv tutari, kdv orani. fotograf burda: {files[2]}")
 
 output = response.text
 
 print(output)
+
+# TODO Save output variable into a excel file
 '''
 tarih,    fatura turu(Satis/Alis),     Cari ad/aciklama,     evrak no,
 vkn,     matrah(kdv),   kdv
