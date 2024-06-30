@@ -12,6 +12,10 @@ import os
 import google.generativeai as genai
 
 genai.configure(api_key="INSERT_YOUR_GEMINI_API_KEY_HERE")
+# Variables
+output = '''
+
+'''
 
 def upload_to_gemini(path, mime_type=None):
   """Uploads the given file to Gemini.
@@ -43,8 +47,8 @@ model = genai.GenerativeModel(
 # You may need to update the file paths
 # TODO: Automaticly choose the images from computer
 files = [
-  upload_to_gemini("src/ftr.png", mime_type="image/jpeg"),
-  upload_to_gemini("src/ftr2.png", mime_type="image/jpeg"),
+  upload_to_gemini("src/ftr.jpg", mime_type="image/jpeg"),
+  # upload_to_gemini("src/ftr2.png", mime_type="image/jpeg"),
 ]
 
 chat_session = model.start_chat(
@@ -52,14 +56,14 @@ chat_session = model.start_chat(
     {
       "role": "user",
       "parts": [
-        "bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN/TCKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani,kdv tutari, kdv orani. fotograf burda: {files[0]}",
+        f"bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani(kdv orani ile ayni),kdv tutari, kdv orani. fotograf burda: {files[0]}",
         files[0],
       ],
     },
     {
       "role": "model",
       "parts": [
-        "**Fatura Tarihi:** 24-12-2015\n**Fatura Turu:** SATIS\n**Uretici Firma ismi:** LOGO \n**Alici Kisi/Firma VKN/TCKN Numarasi:** 4780469628\n**Fatura No:**  GID201500000062\n**Matrah:**  1,00 TL\n**Matrah Orani:** %0\n**KDV Tutari:**  0.00 TL\n**KDV Orani:**  %0.00",
+        "**Fatura Tarihi:** 24-12-2015\n**Fatura Turu:** SATIS\n**Uretici Firma ismi:** LOGO \n**Alici Kisi/Firma VKN Numarasi:** 4780469628\n**Fatura No:**  GID201500000062\n**Matrah:**  1,00 TL\n**Matrah Orani:** %0\n**KDV Tutari:**  0.00 TL\n**KDV Orani:**  %0.00",
       ],
     },
   ]
@@ -67,10 +71,12 @@ chat_session = model.start_chat(
 
 print("\nAnalyzing please wait...\n")
 
-response = chat_session.send_message("bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN/TCKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani,kdv tutari, kdv orani. fotograf burda: {files[1]}")
-print(response.text)
+response = chat_session.send_message(f"bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani(kdv orani ile ayni),kdv tutari, kdv orani. fotograf burda: {files[0]}")
 
+output = response.text
+
+print(output)
 '''
 tarih,    fatura turu(Satis/Alis),     Cari ad/aciklama,     evrak no,
-vkn/tckn,     matrah(kdv),   kdv
+vkn,     matrah(kdv),   kdv
 '''

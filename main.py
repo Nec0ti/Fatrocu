@@ -22,6 +22,9 @@ class MainWindow(QMainWindow):
 
         self.btn_earsiv_pdf = QPushButton("PDF'i png'ye Donustur", self)
         self.btn_earsiv_pdf.clicked.connect(lambda: self.open_directory("PDF'i png'ye Donustur"))
+
+        self.btn_Donustur = QPushButton("Donustur", self)
+        self.btn_Donustur.clicked.connect()
         
         self.log_text = QTextEdit(self)
         self.log_text.setReadOnly(True)
@@ -30,6 +33,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.btn_earsiv_fatura)
         layout.addWidget(self.btn_earsiv_pdf)
         layout.addWidget(self.log_text)
+        layout.addWidget(self.btn_Donustur)
         
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
