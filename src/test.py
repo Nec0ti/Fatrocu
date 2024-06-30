@@ -41,8 +41,10 @@ model = genai.GenerativeModel(
 
 # TODO Make these files available on the local file system
 # You may need to update the file paths
+# TODO: Automaticly choose the images from computer
 files = [
-  upload_to_gemini("src/ftr2.jpg", mime_type="image/jpeg"),
+  upload_to_gemini("src/ftr.png", mime_type="image/jpeg"),
+  upload_to_gemini("src/ftr2.png", mime_type="image/jpeg"),
 ]
 
 chat_session = model.start_chat(
@@ -57,7 +59,7 @@ chat_session = model.start_chat(
     {
       "role": "model",
       "parts": [
-        "This is a beautiful photo of a sea turtle swimming in clear blue water. The turtle is a dark brown color with a slightly lighter brown shell. It has a slightly green tint around the eyes, and is swimming with its head pointed to the right. The water is crystal clear, and the sand on the ocean floor can be seen through the water. The turtle is swimming away from the camera, and you can see its powerful fins propelling it through the water. It is a majestic creature, and this photo captures its beauty perfectly.",
+        "**Fatura Tarihi:** 24-12-2015\n**Fatura Turu:** SATIS\n**Uretici Firma ismi:** LOGO \n**Alici Kisi/Firma VKN/TCKN Numarasi:** 4780469628\n**Fatura No:**  GID201500000062\n**Matrah:**  1,00 TL\n**Matrah Orani:** %0\n**KDV Tutari:**  0.00 TL\n**KDV Orani:**  %0.00",
       ],
     },
   ]
@@ -65,7 +67,7 @@ chat_session = model.start_chat(
 
 print("\nAnalyzing please wait...\n")
 
-response = chat_session.send_message("bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN/TCKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani,kdv tutari, kdv orani. fotograf burda: {files[0]}")
+response = chat_session.send_message("bu fotograftaki su bilgileri yaz; fatura tarihi,fatura turu(Satis/Alis),Uretici firma ismi(sol en ustteki firma uretici olur),Alici kisi/firma'nin VKN/TCKN numarasi(Sol ust kisimda olur ve SAYIN .. firmasi diye baslayan kisim alicinin bilgileri olur),fatura no,matrah,matrah orani,kdv tutari, kdv orani. fotograf burda: {files[1]}")
 print(response.text)
 
 '''
