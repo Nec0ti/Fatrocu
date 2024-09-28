@@ -1,4 +1,3 @@
-// AIzaSyAzUXTLNx-uTZiP9FvYhQzX8Kqp9CA0J3g
 let API_KEY = '';
 const dropArea = document.getElementById('dropArea');
 const fileInput = document.getElementById('fileInput');
