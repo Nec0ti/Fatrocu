@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Anahtarı Değiştir</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #272727;
+            color: white;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5A3E7B;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4CAF50;
+        }
+
+                /* Navbar CSS */
+                .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Fatrocu</div>
+        <div class="nav-links">
+            <a href="index.html">Ana Sayfa</a>
+        </div>
+    </nav>
+
+    <h1>API Anahtarını Değiştir</h1>
+    <input type="text" id="apiKeyInput" placeholder="Yeni API Anahtarınızı Girin">
+    <button id="saveButton">Kaydet</button>
+
+    <script>
+        // Sayfa yüklendiğinde mevcut API anahtarını göstermek için
+        document.getElementById('apiKeyInput').value = localStorage.getItem('API_KEY') || '';
+
+        // API anahtarını kaydetme
+        document.getElementById('saveButton').addEventListener('click', () => {
+            const newApiKey = document.getElementById('apiKeyInput').value;
+            if (newApiKey) {
+                localStorage.setItem('API_KEY', newApiKey);
+                alert('API Anahtarı başarıyla kaydedildi!');
+            } else {
+                alert('Lütfen geçerli bir API anahtarı girin.');
+            }
+        });
+    </script>
+</body>
+</html>

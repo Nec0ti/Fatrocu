@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatrocu</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Navbar CSS */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Fatrocu</div>
+        <div class="nav-links">
+            <a href="change.html">API Anahtarı</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <h1>Fatrocu</h1>
+    <div id="dropArea">Faturaları buraya sürükleyin veya tıklayarak seçin</div>
+    <input type="file" id="fileInput" style="display: none;" multiple accept="image/*,.pdf">
+    <div id="fileList"></div>
+    <div id="progressBar"><div></div></div>
+    <button id="analyzeButton" disabled>Analiz Et</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
