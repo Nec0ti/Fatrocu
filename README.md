@@ -26,25 +26,3 @@ Fatrocu, faturalarınızı hızlı ve kolay bir şekilde analiz etmenizi sağlay
  4. Fatrocu.exe dosyasına iki kere tıklayın.
  5. Uygulama açıldığında, sağ üst kısımdaki API Anahtarı butonuna tıklayın ve Google tarafından sağlanan Gemini API anahtarınızı girin.
  6. Ana sayfaya dönün ve uygulamayı kullanmaya başlayın.
-
-
-- ### Linux
- 1. <a href="https://necoti.itch.io/fatrocu">Fatrocu-linux-x64.tar.gz</a> dosyasını Masaüstünüze indirin.
- 2. Terminali açın ve dosyanın bulunduğu dizine gidin:
-  ```bash
-cd ~/Masaüstü
-```
- 3. Aşağıdaki komutu çalıştırarak dosyayı ayıklayın:
-  ```bash
-tar -xzf Fatrocu-linux-x64.tar.gz
-```
- 4. Fatrocu-linux-x64 klasörüne girin:
-  ```bash
-cd Fatrocu-linux-x64
-```
- 5. Fatrocu uygulamasını başlatmak için terminalde şu komutu çalıştırın:
-  ```bash
-./Fatrocu
-```
- 6. Uygulama açıldıktan sonra, sağ üst kısımdaki API Anahtarı butonuna basın ve Google'ın sağladığı Gemini API anahtarınızı girin.
-Ana sayfaya dönüp uygulamayı kullanmaya başlayabilirsiniz!
