@@ -20,7 +20,7 @@ Fatrocu, faturalarınızı hızlı ve kolay bir şekilde analiz etmenizi sağlay
 
 ## Kullanım
 - ### Windows
- 1. <a href="https://necoti.itch.io/fatrocu">Fatrocu-win32-x64.zip</a> dosyasını Masaüstünüze indirin.
+ 1. <a href="https://github.com/Nec0ti/Fatrocu/releases/download/release/fatrocu-win32-x64.zip">Fatrocu-win32-x64.zip</a> dosyasını Masaüstünüze indirin.
  2. Dosyaya sağ tıklayın ve "Buraya ayıkla" seçeneğine tıklayın.
  3. Fatrocu-win32-x64 klasörüne girin.
  4. Fatrocu.exe dosyasına iki kere tıklayın.
