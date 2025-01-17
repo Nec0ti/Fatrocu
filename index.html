@@ -36,6 +36,62 @@
             display: flex;
             gap: 20px;
         }
+
+        /* Toggle Switch CSS */
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .toggle-container label {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .toggle {
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            position: relative;
+        }
+
+        .toggle input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 34px;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            background-color: white;
+            border-radius: 50%;
+            bottom: 4px;
+            left: 4px;
+            transition: 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
     </style>
 </head>
 <body>
@@ -49,6 +105,10 @@
 
     <!-- Main Content -->
     <h1>Fatrocu</h1>
+    <div>
+        <label for="invoiceName">Satıcı/Alıcı Adı:</label>
+        <input type="text" id="invoiceName" placeholder="Faturalar gelir ise satıcı, gider is alıcı firmanın/kişinin adını Girin">
+    </div>
     <div id="dropArea">Faturaları buraya sürükleyin veya tıklayarak seçin</div>
     <input type="file" id="fileInput" style="display: none;" multiple accept="image/*,.pdf">
     <div id="fileList"></div>

@@ -4,6 +4,7 @@ const fileInput = document.getElementById('fileInput');
 const fileList = document.getElementById('fileList');
 const progressBar = document.getElementById('progressBar').firstElementChild;
 const analyzeButton = document.getElementById('analyzeButton');
+const invoiceNameInput = document.getElementById('invoiceName'); // Yeni input alanı
 let selectedFiles = [];
 
 // Sürükle-bırak ve dosya seçme olayları
@@ -49,8 +50,12 @@ function handleFiles(files) {
         selectedFiles = Array.from(files.target.files);
     }
     updateFileList();
-    analyzeButton.disabled = selectedFiles.length === 0;
+    analyzeButton.disabled = selectedFiles.length === 0 || !invoiceNameInput.value.trim();
 }
+
+invoiceNameInput.addEventListener('input', () => {
+    analyzeButton.disabled = selectedFiles.length === 0 || !invoiceNameInput.value.trim();
+});
 
 function updateFileList() {
     fileList.innerHTML = selectedFiles.map(file => `<p>${file.name}</p>`).join('');
@@ -59,6 +64,12 @@ function updateFileList() {
 analyzeButton.addEventListener('click', analyzeInvoices);
 
 async function analyzeInvoices() {
+    const invoiceName = invoiceNameInput.value.trim();
+    if (!invoiceName) {
+        alert("Lütfen satıcı veya alıcı adını giriniz!");
+        return;
+    }
+
     analyzeButton.disabled = true;
     const totalFiles = selectedFiles.length;
     let processedFiles = 0;
@@ -72,7 +83,7 @@ async function analyzeInvoices() {
     }
 
     for (const chunk of chunks) {
-        const chunkPromises = chunk.map(file => analyzeInvoice(file));
+        const chunkPromises = chunk.map(file => analyzeInvoice(file, invoiceName));
         const results = await Promise.all(chunkPromises);
         
         results.forEach((result, index) => {
@@ -95,12 +106,12 @@ function updateProgress(percentage) {
     progressBar.style.width = `${percentage}%`;
 }
 
-async function analyzeInvoice(file) {
+async function analyzeInvoice(file, invoiceName) {
     try {
-        API_KEY = localStorage.getItem('API_KEY') || API_KEY;  // Anahtarı her işlemden önce günceller.
+        API_KEY = localStorage.getItem('API_KEY') || API_KEY;
         const base64 = await fileToBase64(file);
         const mimeType = file.type;
-        
+
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: {
@@ -112,7 +123,7 @@ async function analyzeInvoice(file) {
                         text: `Fatura bilgilerini analiz et ve sadece aşağıdaki bilgilere ulaşmaya çalış:
                         - Fatura Tarihi
                         - Fatura Türü (Alış/Satış)
-                        - Alıcı Firma'nın VKN veya TCKN Numarası
+                        - Alıcı veya Satıcı'nın VKN veya V.D. veya TCKN Numarası(vkn veya tckn asla ${invoiceName} firmasının olmamalı)
                         - Fatura Numarası
                         - Matrah (Toplam tutar)
                         - KDV Tutarı
