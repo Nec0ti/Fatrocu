@@ -112,8 +112,7 @@ async function analyzeInvoice(file) {
                         text: `Fatura bilgilerini analiz et ve sadece aşağıdaki bilgilere ulaşmaya çalış:
                         - Fatura Tarihi
                         - Fatura Türü (Alış/Satış)
-                        - Alıcı Firma Adı
-                        - Alıcı Kişi/Firma'nın VKN/TCKN Numarası
+                        - Eğer satış faturası ise Alıcı Kişi/Firma'nın VKN/TCKN Numarası alış ise Satıcı Kişi/Firma'nın VKN/TCKN Numarası
                         - Fatura Numarası
                         - Matrah (Toplam tutar)
                         - Matrah Oranı (KDV oranıyla aynı olmalı)
