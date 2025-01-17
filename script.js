@@ -65,7 +65,7 @@ async function analyzeInvoices() {
     const allData = [];
 
     // Eşzamanlı işlem sayısını sınırlamak için
-    const MAX_CONCURRENT = 3;
+    const MAX_CONCURRENT = 1;
     const chunks = [];
     for (let i = 0; i < selectedFiles.length; i += MAX_CONCURRENT) {
         chunks.push(selectedFiles.slice(i, i + MAX_CONCURRENT));
@@ -112,14 +112,25 @@ async function analyzeInvoice(file) {
                         text: `Fatura bilgilerini analiz et ve sadece aşağıdaki bilgilere ulaşmaya çalış:
                         - Fatura Tarihi
                         - Fatura Türü (Alış/Satış)
-                        - Eğer satış faturası ise Alıcı Kişi/Firma'nın VKN/TCKN Numarası alış ise Satıcı Kişi/Firma'nın VKN/TCKN Numarası
+                        - Alıcı Firma'nın VKN veya TCKN Numarası
                         - Fatura Numarası
                         - Matrah (Toplam tutar)
-                        - Matrah Oranı (KDV oranıyla aynı olmalı)
                         - KDV Tutarı
-                        - KDV Oranı
+                        - KDV Oranı (%0 ise yazma)
 
-                        Lütfen bu faturayı incele ve sadece yukarıdaki bilgileri çıkart.`
+                        Lütfen bu faturayı incele ve sadece yukarıdaki bilgileri çıkart.
+
+                        örnek yazılış:
+                        tarih: 12.12.2012
+                        tür:satış
+                        vkn/tckn:1234567890
+                        fatura no:123456
+                        matrah:1000
+                        kdv:200
+                        kdv oranı:%20
+
+                        aynı bu şekilde yazarak bilgileri çıkartabilirsiniz.
+                        `
                     },
                     {
                         inline_data: {
