@@ -12,7 +12,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #333;
+            background-color: #181818;
             padding: 10px 20px;
         }
 
@@ -92,6 +92,53 @@
         input:checked + .slider:before {
             transform: translateX(26px);
         }
+
+        /* Theme Styles */
+        body.light-theme {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        body.dark-theme {
+            background-color: #333;
+            color: #f4f4f4;
+        }
+
+        /* Language Select */
+        .language-select {
+            font-size: 1rem;
+            padding: 5px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .language-select:focus {
+            outline: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .action-buttons button {
+            padding: 5px 10px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .action-buttons button:hover {
+            background-color: #45a049;
+        }
+
     </style>
 </head>
 <body>
@@ -99,29 +146,207 @@
     <nav class="navbar">
         <div class="logo">Fatrocu</div>
         <div class="nav-links">
-            <a href="change.html">API Anahtarı</a>
+            <a href="settings.html" id="settingsLink">Settings</a>
+            <div class="action-buttons">
+                <select class="language-select" id="languageSelect">
+                    <option value="tr">Türkçe</option>
+                    <option value="en">English</option>
+                </select>
+                <button id="saveButton">Save</button>
+            </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <h1>Fatrocu</h1>
+    <h1 id="mainTitle">Fatrocu</h1>
     <div>
-        <label for="invoiceName">Satıcı/Alıcı Adı:</label>
-        <input type="text" id="invoiceName" placeholder="Faturalar gelir ise satıcı, gider is alıcı firmanın/kişinin adını Girin">
+        <label for="invoiceName" id="invoiceLabel">Seller/Buyer Name:</label>
+        <input type="text" id="invoiceName" placeholder="Enter the name of the company/person (seller for income, buyer for expenses)">
 
-        <label>
-            <input type="radio" name="invoiceType" value="gider" checked> Gider
-          </label>
-          <label>
-            <input type="radio" name="invoiceType" value="gelir"> Gelir
-        </label>          
+        <div>
+            <label>Type of Invoice:</label>
+            <input type="radio" name="invoiceType" value="expense" id="expense" checked>
+            <label for="expense">Expense</label>
+            <input type="radio" name="invoiceType" value="income" id="income">
+            <label for="income">Income</label>
+        </div>
+        
+        
+                  
     </div>
-    <div id="dropArea">Faturaları buraya sürükleyin veya tıklayarak seçin</div>
+    <div id="dropArea">Drag invoices here or click to select</div>
     <input type="file" id="fileInput" style="display: none;" multiple accept="image/*,.pdf">
     <div id="fileList"></div>
     <div id="progressBar"><div></div></div>
-    <button id="analyzeButton" disabled>Analiz Et</button>
+    <button id="analyzeButton" disabled>Analyze</button>
 
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next@21.6.4/i18next.min.js"></script>
+    <script>
+        // Sayfa yüklendiğinde tema ve dil ayarlarını yükle
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tema ayarlarını yükle
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.classList.add(savedTheme === 'dark' ? 'dark-theme' : 'light-theme');
+
+            // Dil ayarlarını yükle
+            const savedLanguage = localStorage.getItem('language') || 'en'; // Varsayılan olarak İngilizce
+            i18next.init({
+                lng: savedLanguage,
+                resources: {
+                    en: {
+                        translation: {
+                            "mainTitle": "Fatrocu",
+                            "invoiceLabel": "Seller/Buyer Name:",
+                            "dropArea": "Drag invoices here or click to select",
+                            "analyzeButton": "Analyze",
+                            "settingsLink": "Settings",
+                            "saveButton": "Save",
+                            "invoiceTypeLabel": "Type of Invoice:",
+                            "expense": "Expense",
+                            "income": "Income"
+                        }
+                    },
+                    tr: {
+                        translation: {
+                            "mainTitle": "Fatrocu",
+                            "invoiceLabel": "Satıcı/Alıcı Adı:",
+                            "dropArea": "Faturaları buraya sürükleyin veya tıklayarak seçin",
+                            "analyzeButton": "Analiz Et",
+                            "settingsLink": "Ayarlar",
+                            "saveButton": "Kaydet",
+                            "invoiceTypeLabel": "Fatura Türü:",
+                            "expense": "Gider",
+                            "income": "Gelir"
+                        }
+                    }
+                }
+            }, () => {
+                document.querySelector("h1").innerText = i18next.t('mainTitle');
+                document.querySelector("label[for='invoiceName']").innerText = i18next.t('invoiceLabel');
+                document.getElementById("dropArea").innerText = i18next.t('dropArea');
+                document.getElementById("analyzeButton").innerText = i18next.t('analyzeButton');
+                document.getElementById("settingsLink").innerText = i18next.t('settingsLink');
+                document.getElementById("saveButton").innerText = i18next.t('saveButton');
+                document.getElementById("invoiceTypeLabel").innerText = i18next.t('invoiceTypeLabel');
+                document.querySelectorAll("label[for='expense']").forEach(label => label.innerText = i18next.t('expense'));
+                document.querySelectorAll("label[for='income']").forEach(label => label.innerText = i18next.t('income'));
+
+                // Dil seçeneğini güncelle
+                languageSelect.value = savedLanguage; // Sayfa yüklendiğinde doğru dil seçilsin
+            });
+        });
+
+        // Dil değişikliği
+        const languageSelect = document.getElementById("languageSelect");
+
+        // Sayfa yüklendiğinde önceki sıralamayı ve dil seçim bilgisini al
+        window.addEventListener('load', () => {
+            const storedLanguage = localStorage.getItem('language');
+            const storedOrder = localStorage.getItem('order');  // Sıralama bilgisini al
+
+            if (storedLanguage) {
+                languageSelect.value = storedLanguage;
+                reorderLanguageOptions(storedLanguage, storedOrder); // Sıralamayı ve dili uygula
+            } else {
+                // Eğer önceki dil yoksa, varsayılan olarak Türkçe'yi seç
+                languageSelect.value = 'tr';
+                reorderLanguageOptions('tr', storedOrder);
+            }
+
+            // Dil değiştirildiğinde sıralamayı kaydet
+            languageSelect.addEventListener("change", (event) => {
+                const language = event.target.value;
+                const currentOrder = getCurrentOrder(language);  // Güncel sıralama bilgisini al
+                localStorage.setItem('language', language);
+                localStorage.setItem('order', currentOrder);  // Sıralamayı kaydet
+                reorderLanguageOptions(language, currentOrder);  // Sıralamayı uygula
+
+                // i18next dil değişikliği
+                i18next.changeLanguage(language, () => {
+                    document.querySelector("h1").innerText = i18next.t('mainTitle');
+                    document.querySelector("label[for='invoiceName']").innerText = i18next.t('invoiceLabel');
+                    document.getElementById("dropArea").innerText = i18next.t('dropArea');
+                    document.getElementById("analyzeButton").innerText = i18next.t('analyzeButton');
+                    document.getElementById("settingsLink").innerText = i18next.t('settingsLink');
+                    document.getElementById("saveButton").innerText = i18next.t('saveButton');
+                    document.getElementById("invoiceTypeLabel").innerText = i18next.t('invoiceTypeLabel');
+                    document.querySelectorAll("label[for='expense']").forEach(label => label.innerText = i18next.t('expense'));
+                    document.querySelectorAll("label[for='income']").forEach(label => label.innerText = i18next.t('income'));
+                });
+            });
+        });
+
+        // Dil sırasını güncelleyen fonksiyon
+        function reorderLanguageOptions(selectedLanguage, storedOrder) {
+            const options = languageSelect.options;
+            const optionEn = options[1]; // English
+            const optionTr = options[0]; // Türkçe
+
+            // Eğer sıralama bilgisi varsa, sıralamayı uygula
+            if (storedOrder) {
+                const order = storedOrder.split(',');  // "," ile ayırarak sıralama bilgilerini al
+                if (order[0] === 'en') {
+                    languageSelect.insertBefore(optionEn, optionTr);
+                } else {
+                    languageSelect.insertBefore(optionTr, optionEn);
+                }
+            } else {
+                // Eğer sıralama yoksa, default sıralamayı uygula
+                if (selectedLanguage === 'en') {
+                    languageSelect.insertBefore(optionEn, optionTr);
+                } else {
+                    languageSelect.insertBefore(optionTr, optionEn);
+                }
+            }
+        }
+
+        // Güncel sıralama bilgisini al
+        function getCurrentOrder(selectedLanguage) {
+            if (selectedLanguage === 'en') {
+                return 'en,tr';  // İngilizce önce
+            } else {
+                return 'tr,en';  // Türkçe önce
+            }
+        }
+
+
+
+        // Tema değişikliği
+        document.getElementById("themeToggle").addEventListener('change', (e) => {
+            const newTheme = e.target.checked ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            document.body.classList.toggle('dark-theme', newTheme === 'dark');
+        });
+
+        // Dosya yükleme ve analiz etme işlemleri
+        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+        document.getElementById('analyzeButton').addEventListener('click', analyzeFiles);
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            for (let i = 0; i < files.length; i++) {
+                const li = document.createElement('li');
+                li.innerText = files[i].name;
+                fileList.appendChild(li);
+            }
+        }
+
+        function analyzeFiles() {
+            // Dosyaları analiz et
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.display = 'block';
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.querySelector('div').style.width = `${progress}%`;
+                if (progress === 100) {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+    </script>
 </body>
 </html>

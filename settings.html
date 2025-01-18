@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-theme {
+            background-color: #272727;
+            color: white;
+        }
+
+        .light-theme {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5A3E7B;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4CAF50;
+        }
+
+        /* Navbar CSS */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Fatrocu</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+        </div>
+    </nav>
+
+    <h1>Settings</h1>
+
+    <!-- Theme Selection -->
+    <label for="themeSelect">Select Theme</label>
+    <select id="themeSelect">
+        <option value="light">Light Theme</option>
+        <option value="dark">Dark Theme</option>
+    </select>
+
+    <!-- Change API Key -->
+    <label for="apiKeyInput">Change API Key</label>
+    <input type="text" id="apiKeyInput" placeholder="Enter your new API key">
+
+    <button id="saveButton">Save</button>
+
+    <script>
+        // Load settings when the page is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedApiKey = localStorage.getItem('API_KEY') || '';
+
+            // Set theme
+            document.body.classList.add(savedTheme === 'dark' ? 'dark-theme' : 'light-theme');
+            document.getElementById('themeSelect').value = savedTheme;
+
+            // Set API Key
+            document.getElementById('apiKeyInput').value = savedApiKey;
+        });
+
+        // Handle theme change
+        document.getElementById('themeSelect').addEventListener('change', (event) => {
+            const theme = event.target.value;
+            document.body.classList.remove('light-theme', 'dark-theme');
+            document.body.classList.add(theme === 'dark' ? 'dark-theme' : 'light-theme');
+            localStorage.setItem('theme', theme);
+        });
+
+        // Save API Key
+        document.getElementById('saveButton').addEventListener('click', () => {
+            const newApiKey = document.getElementById('apiKeyInput').value;
+            if (newApiKey) {
+                localStorage.setItem('API_KEY', newApiKey);
+                alert('API Key saved successfully!');
+            } else {
+                alert('Please enter a valid API key.');
+            }
+        });
+    </script>
+</body>
+</html>
