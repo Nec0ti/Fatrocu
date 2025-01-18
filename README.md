@@ -1,35 +1,35 @@
 # Fatrocu
-Fatrocu, e-fatura görsellerinizi veya pdf dosyalarınızı excel formatına çevirir
+Fatrocu converts your e-invoice images or PDF files into Excel format.
 
-## Fatrocu: AI Destekli Fatura Analizi
+## Fatrocu: AI-Powered Invoice Analysis
 
-Fatrocu, faturalarınızı hızlı ve kolay bir şekilde analiz etmenizi sağlayan, yapay zeka destekli bir uygulamadır. PDF ve resim formatındaki faturalarınızı sürükleyip bırakın, yapay zeka fatura bilgilerini sizin için ayıklasın. Fatrocu, fatura tarihinden KDV oranına kadar gerekli tüm bilgileri hızlıca alır ve analiz sonuçlarını Excel formatında kaydetmenize olanak tanır.
+Fatrocu is an AI-powered application that allows you to quickly and easily analyze your invoices. Simply drag and drop your invoices in PDF or image format, and the AI will extract the invoice details for you. Fatrocu swiftly collects all the necessary information, from the invoice date to the VAT rate, and allows you to save the analysis results in Excel format.
 
-## Özellikler:
+## Features:
 
-- PDF ve resim formatındaki faturalarınızı tanıyıp analiz eder.
-- Fatura numarası, tarih, KDV oranı gibi bilgileri ayıklar.
-- Analiz sonuçlarını Excel formatında dışa aktarır.
-- Kullanıcı dostu sürükle-bırak arayüzü ile kolay kullanım.
-- Google’ın yapay zeka teknolojisi ile hassas sonuçlar.
-- Yapay zekanın gücünü kullanarak fatura işlemlerinizi hızlandırın!
+- Recognizes and analyzes invoices in PDF and image formats.
+- Extracts details like invoice number, date, VAT rate, and more.
+- Exports analysis results to Excel format.
+- Easy-to-use drag-and-drop interface.
+- Accurate results powered by Google's AI technology.
+- Speed up your invoicing tasks with the power of AI!
 
-## Gereksinimler:
+## Requirements:
 
-- Google’ın yapay zekası olan Gemini'ın API Anahtarı (ücretsiz bir şekilde edinebilirsiniz).
+- Gemini API key from Google's AI (you can obtain it for free).
 
-## Kullanım
+## Usage
 - ### Windows
- 1. <a href="https://github.com/Nec0ti/Fatrocu/releases">Releases</a> kısmından fatrocu_win-32-x64 isimli dosyayı masaüstünüze indirin.
- 2. Dosyaya sağ tıklayın ve "Buraya ayıkla" seçeneğine tıklayın.
- 3. Fatrocu-win32-x64 klasörüne girin.
- 4. Fatrocu.exe dosyasına iki kere tıklayın.
- 5. Uygulama açıldığında, sağ üst kısımdaki API Anahtarı butonuna tıklayın ve Google tarafından sağlanan Gemini API anahtarınızı girin.
- 6. Ana sayfaya dönün ve uygulamayı kullanmaya başlayın.
+  1. Download the `fatrocu_win-32-x64` file from the <a href="https://github.com/Nec0ti/Fatrocu/releases">Releases</a> section to your desktop.
+  2. Right-click the file and select "Extract here."
+  3. Open the `Fatrocu-win32-x64` folder.
+  4. Double-click the `Fatrocu.exe` file.
+  5. Once the application opens, click the API Key button at the top right and enter your Gemini API key provided by Google.
+  6. Return to the main page and start using the application.
 
 ## TODO
-- [x] PDF/PNG/JPG vb. analiz özelliği
-- [x] Gelir/Gider ayırma özelliği
-- [ ] ÖKC (yazarkasa) fişleri için daha isabetli analizler yapılması
-- [ ] Modele Fine-Tune yapılması
-- [ ] Ekstra özellik ayrıştırması (örneğin fatura üzerindeki telefon numarası gibi)
+- [x] PDF/PNG/JPG analysis feature
+- [x] Income/Expense separation feature
+- [ ] More accurate analysis for OKE (cash register) receipts
+- [ ] Fine-Tuning of the model
+- [ ] Additional feature extraction (e.g., phone numbers on invoices)
