@@ -20,9 +20,16 @@ Fatrocu, faturalarınızı hızlı ve kolay bir şekilde analiz etmenizi sağlay
 
 ## Kullanım
 - ### Windows
- 1. <a href="https://github.com/Nec0ti/Fatrocu/releases/download/release/fatrocu-win32-x64.zip">Fatrocu-win32-x64.zip</a> dosyasını Masaüstünüze indirin.
+ 1. <a href="https://github.com/Nec0ti/Fatrocu/releases">Releases</a> kısmından fatrocu_win-32-x64 isimli dosyayı masaüstünüze indirin.
  2. Dosyaya sağ tıklayın ve "Buraya ayıkla" seçeneğine tıklayın.
  3. Fatrocu-win32-x64 klasörüne girin.
  4. Fatrocu.exe dosyasına iki kere tıklayın.
  5. Uygulama açıldığında, sağ üst kısımdaki API Anahtarı butonuna tıklayın ve Google tarafından sağlanan Gemini API anahtarınızı girin.
  6. Ana sayfaya dönün ve uygulamayı kullanmaya başlayın.
+
+## TODO
+- [x] PDF/PNG/JPG vb. analiz özelliği
+- [x] Gelir/Gider ayırma özelliği
+- [ ] ÖKC (yazarkasa) fişleri için daha isabetli analizler yapılması
+- [ ] Modele Fine-Tune yapılması
+- [ ] Ekstra özellik ayrıştırması (örneğin fatura üzerindeki telefon numarası gibi)
