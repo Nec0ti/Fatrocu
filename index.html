@@ -108,6 +108,13 @@
     <div>
         <label for="invoiceName">Satıcı/Alıcı Adı:</label>
         <input type="text" id="invoiceName" placeholder="Faturalar gelir ise satıcı, gider is alıcı firmanın/kişinin adını Girin">
+
+        <label>
+            <input type="radio" name="invoiceType" value="gider" checked> Gider
+          </label>
+          <label>
+            <input type="radio" name="invoiceType" value="gelir"> Gelir
+        </label>          
     </div>
     <div id="dropArea">Faturaları buraya sürükleyin veya tıklayarak seçin</div>
     <input type="file" id="fileInput" style="display: none;" multiple accept="image/*,.pdf">
