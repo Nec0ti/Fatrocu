@@ -72,8 +72,17 @@ invoiceNameInput.addEventListener('input', () => {
     analyzeButton.disabled = selectedFiles.length === 0 || !invoiceNameInput.value.trim();
 });
 
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 function updateFileList() {
-    fileList.innerHTML = selectedFiles.map(file => `<p>${file.name}</p>`).join('');
+    fileList.innerHTML = selectedFiles.map(file => `<p>${escapeHtml(file.name)}</p>`).join('');
 }
 
 analyzeButton.addEventListener('click', analyzeInvoices);
