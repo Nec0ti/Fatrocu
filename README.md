@@ -30,6 +30,8 @@ Fatrocu is an AI-powered application that allows you to quickly and easily analy
 ## TODO
 - [x] PDF/PNG/JPG analysis feature
 - [x] Income/Expense separation feature
+- [x] More language support (e.g., English)
 - [ ] More accurate analysis for Fiscal Device Receipt (cash register or POS or ÖKC) receipts
 - [ ] Fine-Tuning of the model
 - [ ] Additional feature extraction (e.g., phone numbers on invoices)
+- [ ] More platform support (e.g., Linux and Mac)
