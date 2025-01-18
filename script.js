@@ -7,6 +7,21 @@ const analyzeButton = document.getElementById('analyzeButton');
 const invoiceNameInput = document.getElementById('invoiceName'); // Yeni input alanı
 let selectedFiles = [];
 
+const invoiceTypeToggles = document.querySelectorAll('input[name="invoiceType"]');
+
+// Seçilen değeri al
+function getSelectedInvoiceType() {
+    const selectedToggle = Array.from(invoiceTypeToggles).find(toggle => toggle.checked);
+    return selectedToggle ? selectedToggle.value : 'gider'; // Varsayılan değer "gider"
+}
+
+invoiceTypeToggles.forEach(toggle => {
+    toggle.addEventListener('change', () => {
+        analyzeButton.disabled = selectedFiles.length === 0 || !invoiceNameInput.value.trim();
+    });
+});
+
+
 // Sürükle-bırak ve dosya seçme olayları
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropArea.addEventListener(eventName, preventDefaults, false);
@@ -112,6 +127,9 @@ async function analyzeInvoice(file, invoiceName) {
         const base64 = await fileToBase64(file);
         const mimeType = file.type;
 
+        // Toggle seçiminden invoiceType değerini alın
+        const invoiceType = getSelectedInvoiceType();
+
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: {
@@ -120,27 +138,41 @@ async function analyzeInvoice(file, invoiceName) {
             body: JSON.stringify({
                 contents: [{
                     parts: [{
-                        text: `Fatura bilgilerini analiz et ve sadece aşağıdaki bilgilere ulaşmaya çalış:
+                        text: `Fatura bilgilerini analiz et ve aşağıdaki bilgilere ulaşmaya çalış. Faturanın türüne göre (Gelir/Gider) ilgili bilgileri doğru şekilde ayırt et:
+
+                        Not: "${invoiceName}" firmasına ait bir ${invoiceType} faturasıdır.
+
+                        Faturanın türüne göre şunları çıkart:
+                        1. Eğer ${invoiceType} "gelir" ise:
                         - Fatura Tarihi
                         - Fatura Türü (Alış/Satış)
-                        - Alıcı veya Satıcı'nın VKN veya V.D. veya TCKN Numarası(vkn veya tckn asla ${invoiceName} firmasının olmamalı)
+                        - Alıcı'nın VKN (Vergi Kimlik Numarası), VD (Vergi Dairesi) veya TCKN (T.C. Kimlik Numarası)
                         - Fatura Numarası
-                        - Matrah (Toplam tutar)
+                        - Matrah (Toplam Tutar)
                         - KDV Tutarı
                         - KDV Oranı (%0 ise yazma)
 
-                        Lütfen bu faturayı incele ve sadece yukarıdaki bilgileri çıkart.
+                        2. Eğer ${invoiceType} "gider" ise:
+                        - Fatura Tarihi
+                        - Fatura Türü (Alış/Satış)
+                        - Satıcı'nın VKN (Vergi Kimlik Numarası), VD (Vergi Dairesi) veya TCKN (T.C. Kimlik Numarası)
+                        - Fatura Numarası
+                        - Matrah (Toplam Tutar)
+                        - KDV Tutarı
+                        - KDV Oranı (%0 ise yazma)
 
-                        örnek yazılış:
-                        tarih: 12.12.2012
-                        tür:satış
-                        vkn/tckn:1234567890
-                        fatura no:123456
-                        matrah:1000
-                        kdv:200
-                        kdv oranı:%20
+                        Lütfen bu faturayı incele ve yukarıdaki bilgilere göre verileri çıkart. Çıkartılan bilgiler aşağıdaki formatta olmalı:
 
-                        aynı bu şekilde yazarak bilgileri çıkartabilirsiniz.
+                        Örnek:
+                        tarih: 12.12.2012  
+                        tür: satış  
+                        vkn/tckn: 1234567890  
+                        fatura no: 123456  
+                        matrah: 1000  
+                        kdv: 200  
+                        kdv oranı: %20  
+
+                        Bilgileri yalnızca yukarıdaki formatta ve faturanın türüne uygun olarak ver.
                         `
                     },
                     {
