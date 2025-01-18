@@ -2,37 +2,37 @@
 
 ## Supported Versions
 
-Aşağıdaki tablo, proje için güvenlik güncellemelerinin sağlandığı sürümleri göstermektedir:
+The table below shows the versions of the project that receive security updates:
 
-| Sürüm    | Destek Durumu       |
+| Version  | Support Status      |
 | -------- | ------------------- |
 | 1.2.1    | :white_check_mark:  |
 | < 1.2.0  | :x:                 |
 
-Yeni özelliklerin yalnızca en son ana sürümde (1.2.1 >) destekleneceğini, ancak eski sürümlerdeki kritik güvenlik açıklarının sınırlı bir süreyle yamalanabileceğini unutmayın.
+Please note that new features will only be supported in the latest major version (1.2.1 >), but critical security vulnerabilities in older versions may be patched for a limited time.
 
 ---
 
 ## Reporting a Vulnerability
 
-Güvenlik açıklarını bildirmek için aşağıdaki adımları izleyin:
+To report a security vulnerability, please follow the steps below:
 
-1. **İletişim Kanalları**  
-   Bir güvenlik açığını raporlamak için lütfen issues sayfasına gönderin:  
-   Açıkla ilgili şu bilgileri ekleyin:
-   - Açığın açıklaması
-   - Adımlar (açığı yeniden oluşturmak için gerekli adımlar)
-   - Potansiyel etkiler ve istismar durumu
+1. **Communication Channels**  
+   To report a vulnerability, please submit it to the issues page:  
+   Include the following details about the issue:
+   - A description of the vulnerability
+   - Steps to reproduce the issue
+   - Potential impacts and exploitation scenarios
 
-2. **Vulnerability Süreci**  
-   Kabul edilen açıklar aşağıdaki süreçten geçecektir:  
-   - Sorunun doğrulanması ve etkisinin analiz edilmesi  
-   - Düzeltme geliştirilmesi ve test edilmesi  
-   - İlgili sürümün yayınlanması  
+2. **Vulnerability Process**  
+   Accepted vulnerabilities will go through the following process:  
+   - Verification and impact analysis of the issue  
+   - Development and testing of a fix  
+   - Release of the updated version  
 
-3. **Gizlilik Politikası**  
-   Açıklar düzeltilene kadar raporlar gizli tutulacaktır. Açığı bildiren kişinin isteği üzerine, sorunun çözülmesinde sağladığı katkılar, uygun bir şekilde takdir edilecektir.
+3. **Confidentiality Policy**  
+   Reports will remain confidential until the issue is resolved. Upon request from the reporter, contributions made to resolving the issue will be properly acknowledged.
 
 ---
 
-Eğer başka bir konuda bilgi almak isterseniz, lütfen **[repository/issues](https://github.com/Nec0ti/Fatrocu/issues)** sekmesini ziyaret edin.
+If you need further information, please visit the **[repository/issues](https://github.com/Nec0ti/Fatrocu/issues)** section.
