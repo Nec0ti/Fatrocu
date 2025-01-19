@@ -24,8 +24,13 @@ Fatrocu is an AI-powered application that allows you to quickly and easily analy
   2. Right-click the file and select "Extract here."
   3. Open the `Fatrocu-win32-x64` folder.
   4. Double-click the `Fatrocu.exe` file.
-  5. Once the application opens, click the API Key button at the top right and enter your Gemini API key provided by Google.
+  5. Once the application opens, click the 'Settings' button at the top right and enter your Gemini API key provided by Google.
   6. Return to the main page and start using the application.
+ 
+- ### Web Browser
+  1. Go to <a href="https://nec0ti.github.io/Fatrocu">nec0ti.github.io/Fatrocu</a>.
+  2. Click the 'Settings' button at the top right and enter your Gemini API key provided by Google.
+  3. Return to the main page and start using the application.
 
 ## TODO
 - [x] PDF/PNG/JPG analysis feature
