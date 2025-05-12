@@ -55,11 +55,11 @@ def upload_file():
 
         except Exception as e:
             # Dosya kaydetme veya process_invoice çağrısı sırasında genel hata
-            print(f"Dosya yükleme/işleme sırasında genel hata: {e}")
+            print(f"Dosya yükleme/işleme sırasında genel hata: {e}")  # Log the detailed error
             # Hata durumunu da JSON olarak kaydetmeye çalışalım
             error_data = {
                  "status": "error", "filename": filename, "extracted_data": None,
-                 "error": f"Yükleme/İşleme sırasında beklenmedik sunucu hatası: {str(e)}"
+                 "error": "Yükleme/İşleme sırasında beklenmedik bir sunucu hatası oluştu."
             }
             save_result(filename, error_data) # Fonksiyon None dönebilir ama denemekte fayda var
             return jsonify(error_data), 500
@@ -110,7 +110,7 @@ def export_excel_route(filename): # Fonksiyon adını route'dan ayırmak iyi pra
              print(f"Oluşturulan Excel dosyası bulunamadı: {excel_filepath}")
              return jsonify(error="Oluşturulan Excel dosyası gönderilemedi."), 404
         except Exception as e:
-             print(f"Excel gönderilirken hata: {e}")
-             return jsonify(error=f"Excel gönderilirken sunucu hatası: {str(e)}"), 500
+             current_app.logger.error(f"Excel gönderilirken hata: {e}")
+             return jsonify(error="Excel gönderilirken sunucu hatası oluştu."), 500
     else:
         return jsonify(error="Excel dosyası oluşturulamadı veya bulunamadı."), 500
