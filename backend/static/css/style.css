@@ -1,0 +1,9 @@
+body {
+    font-family: sans-serif;
+    padding: 20px;
+}
+
+#upload-status {
+    margin-top: 15px;
+    font-weight: bold;
+}

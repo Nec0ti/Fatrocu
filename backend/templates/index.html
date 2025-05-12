@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatrocu - Akıllı Fatura İşleme</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Fatrocu v2'ye Hoş Geldiniz!</h1>
+    <p>Backend çalışıyor gibi görünüyor.</p>
+
+    <h2>Dosya Yükle</h2>
+    <form id="upload-form">
+        <input type="file" id="file-input" name="file" required>
+        <button type="submit">Yükle ve İşle</button>
+    </form>
+    <div id="upload-status"></div>
+
+    <h2>Son İşlenen Dosyalar (Örnek)</h2>
+    <ul id="processed-files">
+        <!-- Burası JS ile doldurulacak -->
+    </ul>
+
+    <!-- JS dosyalarını en sona eklemek genellikle iyi pratiktir -->
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

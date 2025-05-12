@@ -1,2 +1,16 @@
-/node_modules
-/dist
+# backend/.gitignore
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.flaskenv # Bazen hassas bilgi içerebilir
+uploads/
+output/
+instance/ # Flask instance folder
+*.sqlite3 # Eğer veritabanı kullanırsanız
+
+# Kök .gitignore (gerekirse ekler)
+.vscode/
+.idea/
+*.log
