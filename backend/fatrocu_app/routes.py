@@ -1,27 +1,28 @@
 # backend/fatrocu_app/routes.py
-from flask import Blueprint, jsonify, request, render_template, send_from_directory, current_app
+from flask import Blueprint, jsonify, request, send_from_directory, current_app
 from werkzeug.utils import secure_filename
 import os
-import pandas as pd # Excel için (mock data içinde kullanılıyorsa)
+import pandas as pd
 
-# API endpointleri için bir Blueprint oluştur
-# url_prefix='/api' sayesinde tüm bu blueprint'teki routelar /api ile başlayacak
+# Servis fonksiyonlarını import et
+from .services.file_handler import process_invoice, load_result, save_result # save_result eklendi
+from .services.excel_exporter import create_excel # Ayrı bir excel modülü oluşturalım
+
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
-# Örnek bir API endpoint'i
+# Örnek endpoint (değişiklik yok)
 @api_bp.route('/hello')
 def hello():
     return jsonify(message="Backend'den Merhaba!")
 
-# ---- DOSYA YÜKLEME ENDPOINT'İ ----
+# ---- DOSYA YÜKLEME & İŞLEME ENDPOINT'İ ----
 @api_bp.route('/upload', methods=['POST'])
 def upload_file():
-    # current_app üzerinden uygulama yapılandırmasına eriş
     app_config = current_app.config
+    upload_folder = app_config['UPLOAD_FOLDER']
 
-    # Klasörlerin varlığını kontrol et (burada veya __init__.py'de yapılabilir)
-    if not os.path.exists(app_config['UPLOAD_FOLDER']):
-        os.makedirs(app_config['UPLOAD_FOLDER'])
+    if not os.path.exists(upload_folder):
+        os.makedirs(upload_folder)
 
     if 'file' not in request.files:
         return jsonify(error="Dosya bulunamadı"), 400
@@ -31,62 +32,85 @@ def upload_file():
 
     if file:
         filename = secure_filename(file.filename)
-        filepath = os.path.join(app_config['UPLOAD_FOLDER'], filename)
+        filepath = os.path.join(upload_folder, filename)
         try:
             file.save(filepath)
             print(f"Dosya kaydedildi: {filepath}")
-            # TODO: İşleme servisini çağır
-            return jsonify(message=f"'{filename}' başarıyla yüklendi.", filename=filename), 200
+
+            # ------ FATURA İŞLEME ------
+            # file_handler'daki ana işleme fonksiyonunu çağır
+            processing_result = process_invoice(filepath)
+            # --------------------------
+
+            # İşleme sonucunu (başarılı veya hatalı) doğrudan döndür
+            if processing_result.get("status") == "error" or processing_result.get("status") == "failed":
+                 # Belki hata durumunda farklı HTTP kodu dönebiliriz? 500 Internal Server Error gibi?
+                 # Şimdilik 200 OK ile birlikte hatayı JSON içinde dönelim.
+                 print(f"İşleme başarısız/hatalı: {filename}")
+                 # return jsonify(processing_result), 500
+            else:
+                 print(f"İşleme başarılı: {filename}")
+
+            return jsonify(processing_result), 200 # Başarı veya hata JSON'ı döndür
+
         except Exception as e:
-            print(f"Dosya kaydedilirken hata: {e}")
-            return jsonify(error=f"Dosya kaydedilemedi: {e}"), 500
+            # Dosya kaydetme veya process_invoice çağrısı sırasında genel hata
+            print(f"Dosya yükleme/işleme sırasında genel hata: {e}")
+            # Hata durumunu da JSON olarak kaydetmeye çalışalım
+            error_data = {
+                 "status": "error", "filename": filename, "extracted_data": None,
+                 "error": f"Yükleme/İşleme sırasında beklenmedik sunucu hatası: {str(e)}"
+            }
+            save_result(filename, error_data) # Fonksiyon None dönebilir ama denemekte fayda var
+            return jsonify(error_data), 500
     return jsonify(error="Geçersiz dosya"), 400
 
-# ---- SONUÇLARI ALMA ENDPOINT'İ (TASLAK) ----
-# Dikkat: filename parametresi route'a eklenmeli
+# ---- SONUÇLARI ALMA ENDPOINT'İ ----
 @api_bp.route('/results/<filename>', methods=['GET'])
 def get_results(filename):
-    # TODO: filename'e ait işlenmiş veriyi bulup döndür
-    mock_data = {
-        "fatura_no": "ABC123456", "tarih": "15.07.2024", "vkn_tckn": "1112223334",
-        "firma_unvan": "Örnek Teknoloji A.Ş.", "matrah": 1000.00, "kdv_orani": 20,
-        "kdv_tutari": 200.00, "toplam": 1200.00, "status": "completed",
-        "source_type": "pdf_image"
-    }
-    return jsonify(data=mock_data), 200
+    # Kaydedilmiş JSON sonucunu yükle
+    result_data = load_result(secure_filename(filename)) # filename'i güvenli hale getir
+    if result_data:
+        return jsonify(result_data), 200
+    else:
+        # Henüz işlenmemiş veya bulunamayan dosya
+        return jsonify(error=f"'{filename}' için sonuç bulunamadı veya henüz işlenmedi."), 404
 
-# ---- EXCEL İNDİRME ENDPOINT'İ (TASLAK) ----
-# Dikkat: filename parametresi route'a eklenmeli
+# ---- EXCEL İNDİRME ENDPOINT'İ ----
 @api_bp.route('/export/<filename>', methods=['GET'])
-def export_excel(filename):
+def export_excel_route(filename): # Fonksiyon adını route'dan ayırmak iyi pratik
     app_config = current_app.config
+    output_folder = app_config['OUTPUT_FOLDER']
+    safe_filename = secure_filename(filename)
 
-     # Klasörlerin varlığını kontrol et
-    if not os.path.exists(app_config['OUTPUT_FOLDER']):
-        os.makedirs(app_config['OUTPUT_FOLDER'])
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
 
-    excel_filename = f"{os.path.splitext(filename)[0]}.xlsx"
-    excel_filepath = os.path.join(app_config['OUTPUT_FOLDER'], excel_filename)
+    # Önce işlenmiş veriyi JSON dosyasından yükle
+    result_data = load_result(safe_filename)
 
-    # ---- SAHTE EXCEL OLUŞTURMA ----
-    try:
-        mock_data = {
-            "Fatura No": ["ABC123456"], "Tarih": ["15.07.2024"], "VKN/TCKN": ["1112223334"],
-            "Firma Ünvanı": ["Örnek Teknoloji A.Ş."], "Matrah": [1000.00], "KDV Oranı (%)": [20],
-            "KDV Tutarı": [200.00], "Toplam Tutar": [1200.00]
-        }
-        df = pd.DataFrame(mock_data)
-        # openpyxl engine'i genellikle .xlsx için gereklidir
-        df.to_excel(excel_filepath, index=False, engine='openpyxl')
-        print(f"Excel oluşturuldu: {excel_filepath}")
-    except Exception as e:
-        print(f"Excel oluşturulurken hata: {e}")
-        return jsonify(error=f"Excel dosyası oluşturulamadı: {e}"), 500
-    # ---- SAHTE EXCEL BİTTİ ----
+    if not result_data or result_data.get("status") not in ["completed", "verified"]: # Sadece başarılı/doğrulanmış olanları export et
+         error_msg = f"'{safe_filename}' için dışa aktarılacak onaylanmış veri bulunamadı."
+         if result_data and result_data.get('error'):
+              error_msg += f" Hata: {result_data.get('error')}"
+         elif not result_data:
+              error_msg = f"'{safe_filename}' dosyası veya işlenmiş verisi bulunamadı."
+         return jsonify(error=error_msg), 404
 
-    try:
-        # send_from_directory kullanırken dosya adını verin, tam yolu değil
-        return send_from_directory(app_config['OUTPUT_FOLDER'], excel_filename, as_attachment=True)
-    except FileNotFoundError:
-         print(f"Excel dosyası bulunamadı: {excel_filepath}")
-         return jsonify(error="Oluşturulan Excel dosyası bulunamadı."), 404
+
+    # Excel oluşturma işlemini ayrı bir fonksiyona taşıyalım
+    excel_filepath = create_excel(result_data.get("extracted_data", {}), safe_filename, output_folder)
+
+    if excel_filepath and os.path.exists(excel_filepath):
+        try:
+            # Göreceli path yerine dosya adını verelim
+            excel_basename = os.path.basename(excel_filepath)
+            return send_from_directory(output_folder, excel_basename, as_attachment=True)
+        except FileNotFoundError:
+             print(f"Oluşturulan Excel dosyası bulunamadı: {excel_filepath}")
+             return jsonify(error="Oluşturulan Excel dosyası gönderilemedi."), 404
+        except Exception as e:
+             print(f"Excel gönderilirken hata: {e}")
+             return jsonify(error=f"Excel gönderilirken sunucu hatası: {str(e)}"), 500
+    else:
+        return jsonify(error="Excel dosyası oluşturulamadı veya bulunamadı."), 500

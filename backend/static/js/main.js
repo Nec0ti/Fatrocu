@@ -6,9 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (uploadForm && fileInput) {
         uploadForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Formun varsayılan gönderimini engelle
+            event.preventDefault();
             const file = fileInput.files[0];
-
             if (!file) {
                 showUploadStatus("Lütfen bir dosya seçin.", true);
                 return;
@@ -16,20 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showUploadStatus("Dosya yükleniyor ve işleniyor...", false);
 
-            // api.js içindeki fonksiyonu çağır
-            const uploadResult = await uploadFile(file);
+            const uploadResult = await uploadFile(file); // uploadFile artık işlenmiş sonucu dönüyor
 
-            if (uploadResult.success) {
-                showUploadStatus(uploadResult.message, false);
-                // Başarılı yüklemeden sonra dosyayı listeye ekle
-                if(uploadResult.filename) {
-                    addProcessedFileToList(uploadResult.filename);
-                }
-                // Formu temizle (opsiyonel)
-                 uploadForm.reset();
-            } else {
-                showUploadStatus(`Yükleme hatası: ${uploadResult.error}`, true);
+            // === VERİYİ LOGLA ===
+            console.log("displayProcessingResult'a gönderilen veri:", uploadResult);
+            // =====================
+
+            // Gelen sonucu doğrudan gösterelim
+            displayProcessingResult(uploadResult); // uploadResult tüm JSON yanıtını içerir
+
+            // Sadece başarılı ise listeye ekleyelim
+            if (uploadResult && uploadResult.status && uploadResult.status !== 'error' && uploadResult.status !== 'failed' && uploadResult.filename) {
+                addProcessedFileToList(uploadResult.filename);
             }
+
+            // Formu temizle
+             uploadForm.reset();
         });
     } else {
         console.error("Yükleme formu veya dosya girişi bulunamadı.");

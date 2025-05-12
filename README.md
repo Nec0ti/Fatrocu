@@ -1,4 +1,4 @@
-# Fatrocu: Akıllı Fatura İşleme Asistanı
+# Fatrocu v2
 
 **Muhasebe süreçlerinizi hızlandırın ve doğruluğu en üst düzeye çıkarın. Fatrocu, e-Faturaları, PDF'leri ve resimleri analiz ederek verileri otomatik olarak yapılandırılmış Excel formatına dönüştürür.**
 

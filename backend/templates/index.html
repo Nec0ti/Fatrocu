@@ -4,25 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fatrocu - Akıllı Fatura İşleme</title>
+    <!-- Favicon ekleyelim (opsiyonel ama güzel durur) -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Fatrocu v2'ye Hoş Geldiniz!</h1>
-    <p>Backend çalışıyor gibi görünüyor.</p>
+    <!-- Ana içerik için bir container ekleyelim -->
+    <div class="container">
+        <h1>Fatrocu v2</h1>
+        <p>Faturalarınızı (XML, PDF, Resim) yükleyerek verileri otomatik çıkarın ve Excel'e aktarın.</p>
 
-    <h2>Dosya Yükle</h2>
-    <form id="upload-form">
-        <input type="file" id="file-input" name="file" required>
-        <button type="submit">Yükle ve İşle</button>
-    </form>
-    <div id="upload-status"></div>
+        <!-- Yükleme Alanı -->
+        <div class="card">
+            <h2>Dosya Yükle</h2>
+            <!-- Formun etrafına bir sarmalayıcı ekleyebiliriz -->
+            <div class="upload-area">
+                 <form id="upload-form">
+                     <!-- Daha şık bir dosya seçimi için label kullanabiliriz -->
+                     <label for="file-input" class="file-label">
+                         Dosya Seç veya Sürükle Bırak
+                         <input type="file" id="file-input" name="file" required>
+                     </label>
+                     <button type="submit" class="button primary">Yükle ve İşle</button>
+                 </form>
+             </div>
+        </div>
 
-    <h2>Son İşlenen Dosyalar (Örnek)</h2>
-    <ul id="processed-files">
-        <!-- Burası JS ile doldurulacak -->
-    </ul>
+        <!-- Sonuçların Gösterileceği Alan -->
+        <div class="card result-area"> <!-- Yeni bir class ekledik -->
+            <h2>İşlem Sonucu</h2>
+            <div id="upload-status">
+                <!-- Burası JS tarafından doldurulacak -->
+                 <p>Henüz bir dosya işlenmedi.</p>
+            </div>
+        </div>
 
-    <!-- JS dosyalarını en sona eklemek genellikle iyi pratiktir -->
+        <!-- İşlenen Dosyalar Listesi -->
+        <div class="card">
+            <h2>Son İşlenen Dosyalar</h2>
+            <ul id="processed-files">
+                <!-- Burası JS ile doldurulacak -->
+                 <li>Liste boş.</li>
+            </ul>
+        </div>
+
+    </div> <!-- .container sonu -->
+
+    <!-- JS dosyaları -->
     <script src="{{ url_for('static', filename='js/api.js') }}"></script>
     <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
