@@ -78,7 +78,7 @@ Contributions are welcome! If you'd like to help improve Fatrocu, please feel fr
 
 ## License
 
-Example: This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ---
 
