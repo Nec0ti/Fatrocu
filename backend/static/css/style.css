@@ -1,0 +1,244 @@
+/* Genel Sıfırlamalar ve Temel Ayarlar */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f7f9; /* Açık gri arka plan */
+    color: #333;
+    padding: 20px;
+    display: flex; /* Container'ı ortalamak için */
+    justify-content: center;
+}
+
+.container {
+    max-width: 900px; /* Maksimum genişlik */
+    width: 100%;
+    background-color: #ffffff; /* Beyaz container arka planı */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Hafif gölge */
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50; /* Koyu mavi başlık */
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #34495e; /* Biraz daha açık mavi */
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ecf0f1; /* İnce ayırıcı çizgi */
+    padding-bottom: 5px;
+}
+
+p {
+    margin-bottom: 15px;
+    color: #555;
+}
+
+/* Kart Görünümü */
+.card {
+    background-color: #fff; /* Kartlar da beyaz olsun */
+    border: 1px solid #e0e4e8; /* Çok hafif kenarlık */
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 25px;
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); */ /* İsteğe bağlı iç gölge */
+}
+
+/* Yükleme Alanı */
+.upload-area {
+    border: 2px dashed #bdc3c7; /* Kesikli kenarlık */
+    padding: 25px;
+    text-align: center;
+    border-radius: 6px;
+    background-color: #f8f9fa; /* Çok hafif gri arka plan */
+    margin-bottom: 20px;
+    transition: background-color 0.2s ease;
+}
+.upload-area:hover {
+     background-color: #f1f3f5;
+}
+
+#upload-form {
+    display: flex;
+    flex-direction: column; /* Öğeleri alt alta diz */
+    align-items: center; /* Ortala */
+}
+
+/* Özel Dosya Seçim Stili */
+.file-label {
+    display: inline-block; /* Buton gibi davranması için */
+    padding: 12px 20px;
+    background-color: #3498db; /* Mavi arka plan */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 15px; /* Butonla arasına boşluk */
+    transition: background-color 0.2s ease;
+}
+
+.file-label:hover {
+    background-color: #2980b9;
+}
+
+#file-input {
+    display: none; /* Gerçek input'u gizle */
+}
+
+/* Genel Buton Stili */
+.button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-decoration: none; /* Linkler için */
+    display: inline-block; /* Linkler için */
+    text-align: center;
+}
+
+.button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px); /* Hafif yukarı kalkma efekti */
+}
+
+.button.primary {
+    background-color: #2ecc71; /* Yeşil ana işlem butonu */
+    color: white;
+}
+.button.primary:hover {
+     background-color: #27ae60;
+}
+
+.button.secondary { /* "Sonuçları Gör" butonu için */
+     background-color: #ecf0f1;
+     color: #34495e;
+     padding: 6px 12px; /* Daha küçük buton */
+     font-size: 0.9rem;
+}
+.button.secondary:hover {
+      background-color: #dadedf;
+}
+
+/* Sonuç Alanı */
+.result-area {
+    background-color: #fdfdfe; /* Hafif farklı arka plan */
+}
+
+#upload-status {
+    margin-top: 10px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    min-height: 50px; /* Boşken de yer kaplasın */
+    word-wrap: break-word; /* Uzun metinleri kır */
+}
+
+#upload-status p {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+/* JS'nin eklediği color inline stillerini yakalayalım (ideal olmasa da pratik) */
+#upload-status[style*="color: red"] {
+    border-left: 4px solid #e74c3c; /* Kırmızı kenar */
+    background-color: #fceded;
+}
+#upload-status[style*="color: green"] {
+    border-left: 4px solid #2ecc71; /* Yeşil kenar */
+    background-color: #eafaf1;
+}
+#upload-status[style*="color: orange"] {
+    border-left: 4px solid #f39c12; /* Turuncu kenar */
+    background-color: #fef5e7;
+}
+
+#upload-status pre {
+    background-color: #ecf0f1; /* JSON arka planı */
+    padding: 15px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace; /* Monospace font */
+    font-size: 0.9rem;
+    overflow-x: auto; /* Yatayda kaydırma */
+    white-space: pre-wrap; /* Satırları koru ama taşırma */
+    word-wrap: break-word; /* Kelimeleri kır */
+    border: 1px solid #dce1e4;
+}
+
+/* İşlenen Dosyalar Listesi */
+#processed-files {
+    list-style: none; /* Madde işaretlerini kaldır */
+    padding: 0;
+}
+
+#processed-files li {
+    border-bottom: 1px solid #ecf0f1;
+    padding: 12px 5px;
+    display: flex;
+    justify-content: space-between; /* Öğeleri iki uca yasla */
+    align-items: center; /* Dikeyde ortala */
+    font-size: 0.95rem;
+}
+
+#processed-files li:last-child {
+    border-bottom: none; /* Son öğenin alt çizgisini kaldır */
+}
+
+#processed-files button,
+#processed-files a {
+    margin-left: 10px; /* Butonlar/linkler arasına boşluk */
+}
+
+/* Excel linkini de buton gibi gösterelim */
+#processed-files a {
+    background-color: #95a5a6;
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    text-decoration: none;
+}
+#processed-files a:hover {
+     background-color: #7f8c8d;
+}
+
+/* Küçük Ekranlar İçin (Basit Ayar) */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 15px;
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+    h2 {
+        font-size: 1.3rem;
+    }
+    .button, .file-label {
+        padding: 10px 15px;
+        font-size: 0.95rem;
+    }
+     #processed-files li {
+         flex-direction: column; /* Mobil'de alt alta diz */
+         align-items: flex-start; /* Sola yasla */
+     }
+      #processed-files li > span { /* Dosya adını span içine alırsak */
+          margin-bottom: 8px;
+      }
+       #processed-files div.actions { /* Butonları bir div içine alırsak */
+           margin-top: 8px;
+       }
+}

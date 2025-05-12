@@ -1,85 +1,92 @@
-# Fatrocu: AI-Powered Invoice Data Extraction
+# Fatrocu v2
 
-**Effortlessly convert invoice images and PDFs into structured Excel data.**
-
----
-
-## Overview
-
-Fatrocu streamlines your accounting workflow by automating the tedious task of manual data entry from invoices. Leveraging the power of Google's Gemini AI, Fatrocu intelligently analyzes invoice documents (PDFs and images), extracts key information, and allows you to export it directly into an Excel spreadsheet.
-
-Simply drag and drop your invoice files, and let Fatrocu handle the rest – from capturing the invoice number and date to identifying VAT amounts and categorizing income/expenses.
-
-## Key Features
-
-*   **Multi-Format Support:** Analyzes invoices provided as PDF, PNG, or JPG files.
-*   **Intelligent Data Extraction:** Automatically identifies and extracts crucial details:
-    *   Invoice Number
-    *   Invoice Date
-    *   Supplier/Customer Information (Basic)
-    *   Total Amount
-    *   VAT Amount & Rate
-    *   And more...
-*   **Income/Expense Categorization:** Helps differentiate between incoming and outgoing transactions.
-*   **Excel Export:** Easily save all extracted data in a well-structured `.xlsx` file for further analysis or import into accounting software.
-*   **Simple Drag-and-Drop Interface:** User-friendly design requires no technical expertise.
-*   **AI-Powered Accuracy:** Utilizes Google's advanced Gemini AI models for reliable data recognition.
-*   **Cross-Platform Access:** Available as a downloadable Windows application and a web-based version.
-*   **Multilingual Potential:** Includes support for processing invoices in different languages (e.g., English, Turkish).
-
-## How It Works
-
-1.  **Upload:** Drag and drop your invoice file(s) (PDF, PNG, JPG) onto the Fatrocu interface.
-2.  **AI Analysis:** Fatrocu securely sends the invoice data to the Google Gemini API for processing. The AI identifies and extracts relevant fields.
-3.  **Review & Export:** The extracted information is presented within the application. You can review the results and export them as an Excel file with a single click.
-
-## Requirements
-
-*   **Google Gemini API Key:** Fatrocu uses Google's Gemini AI for its core data extraction capabilities. You need an API key to use the service.
-    *   You can obtain a **free** API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
-    *   The free tier is generally sufficient for moderate usage.
-
-## Installation and Usage
-
-### Windows Application
-
-1.  Navigate to the [**Releases**](https://github.com/Nec0ti/Fatrocu/releases) page on GitHub.
-2.  Download the `fatrocu_win-32-x64.zip` (or similar) archive.
-3.  Extract the contents of the downloaded `.zip` file to a location on your computer (e.g., your Desktop).
-4.  Open the extracted folder (e.g., `Fatrocu-win32-x64`).
-5.  Double-click the `Fatrocu.exe` file to launch the application.
-6.  Upon first launch, click the **'Settings'** button (usually top-right).
-7.  Enter your **Google Gemini API Key** in the designated field and save.
-8.  Return to the main screen and start processing your invoices by dragging and dropping files.
-
-### Web Browser Version
-
-1.  Open your web browser and go to: [**https://nec0ti.github.io/Fatrocu**](https://nec0ti.github.io/Fatrocu)
-2.  Click the **'Settings'** button (usually top-right).
-3.  Enter your **Google Gemini API Key** in the designated field and save.
-4.  Return to the main page and begin using the application by dragging and dropping your invoice files.
-
-## Roadmap / Future Enhancements
-
-*   [ ] **Intermediate JSON Step:** Convert input files (PDF, PNG, etc.) to a structured JSON format first, then extract data from JSON. (Potential for higher accuracy and easier field mapping).
-*   [x] PDF/PNG/JPG analysis feature.
-*   [x] Income/Expense separation feature.
-*   [x] More language support (e.g., English).
-*   [ ] **Improved Fiscal Receipt Accuracy:** Enhance analysis specifically for Fiscal Device Receipts (ÖKC / Cash Register / POS receipts).
-*   [ ] **Model Fine-Tuning:** Explore fine-tuning the AI model for better performance on specific invoice layouts or types.
-*   [ ] **Extended Data Extraction:** Add capabilities to extract additional fields like line items, phone numbers, bank details, etc.
-*   [ ] **Wider Platform Support:** Develop native versions for Linux and macOS.
-*   [x] **Batch Processing:** Allow users to upload and process multiple invoices simultaneously.
-*   [ ] **User Configuration:** Allow users to specify or map custom fields they want to extract.
-
-## Contributing
-
-Contributions are welcome! If you'd like to help improve Fatrocu, please feel free to fork the repository, make changes, and submit a pull request. You can also open an issue to report bugs or suggest new features.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+**Muhasebe süreçlerinizi hızlandırın ve doğruluğu en üst düzeye çıkarın. Fatrocu, e-Faturaları, PDF'leri ve resimleri analiz ederek verileri otomatik olarak yapılandırılmış Excel formatına dönüştürür.**
 
 ---
 
-*Speed up your invoice processing with Fatrocu!*
+## Genel Bakış
+
+Fatrocu, mali müşavirler ve işletmeler için fatura veri girişinin sıkıcı ve hataya açık sürecini otomatikleştirmek üzere tasarlanmıştır. Türkiye'deki e-Fatura (UBL-TR XML) standartlarını önceliklendirerek %100'e yakın doğruluk sağlarken, PDF ve resim formatındaki faturalar için Google'ın en gelişmiş AI modellerinden biri olan **Gemini 2.5 Pro Preview**'in gücünü kullanır.
+
+Sezgisel web arayüzü sayesinde faturalarınızı kolayca yükleyin, Fatrocu'nun akıllı analizini izleyin, çıkarılan verileri hızla doğrulayın ve tek tıklamayla Excel'e aktarın.
+
+## Anahtar Özellikler
+
+*   **🥇 e-Fatura (UBL-TR XML) Desteği:** Yüklenen XML dosyalarını veya PDF'e gömülü XML'leri doğrudan ayrıştırarak **maksimum doğruluk** sağlar.
+*   **✨ Gelişmiş PDF ve Resim Analizi:** Google Gemini 2.5 Pro kullanarak PDF, PNG, JPG, JPEG gibi formatlardaki faturalardan metin okuma (OCR) ve akıllı veri çıkarma.
+*   **🧠 Akıllı Veri Çıkarma:** Kritik fatura bilgilerini otomatik olarak tanımlar ve çıkarır:
+    *   Fatura Numarası (Belge No, Seri/Sıra No)
+    *   Fatura Tarihi
+    *   Satıcı/Müşteri Vergi Kimlik Numarası (VKN / TCKN)
+    *   KDV Matrah(lar)ı
+    *   KDV Oran(lar)ı ve Tutar(lar)ı
+    *   Genel Toplam / Ödenecek Tutar
+    *   (Gelecekte: Ürün/Hizmet kalemleri, para birimi, IBAN vb.)
+*   **✔️ Veri Doğrulama Motoru:** AI tarafından çıkarılan verilerin doğruluğunu artırmak için otomatik format kontrolleri (tarih, VKN/TCKN) ve matematiksel tutarlılık kontrolleri (Matrah + KDV ≈ Toplam).
+*   **🖥️ Etkileşimli Doğrulama Arayüzü:** Kullanıcı dostu web arayüzünde fatura görselini ve çıkarılan verileri yan yana görüntüleyin. AI tarafından bulunan alanların görselleştirilmesi (planlanan) ve kolayca düzenlenip onaylanabilmesi.
+*   **📊 Excel'e Aktarım:** Doğrulanan tüm verileri muhasebe yazılımlarıyla uyumlu, yapılandırılmış `.xlsx` dosyası olarak kolayca dışa aktarın.
+*   **☁️ Web Tabanlı Erişim:** Herhangi bir modern web tarayıcısı üzerinden erişilebilir, kurulum gerektirmez (kullanıcı için).
+*   **🔐 Güvenli Mimari:** Hibrit yapı (Python Backend + Web Frontend) sayesinde Google Gemini API anahtarınız güvende tutulur (Backend'de saklanır).
+*   **🚀 Verimlilik Odaklı:** Manuel veri giriş süresini önemli ölçüde azaltır ve insan hatası riskini minimize eder.
+
+## Nasıl Çalışır?
+
+1.  **Yükleme:** Fatura dosyanızı (XML, PDF, PNG, JPG vb.) Fatrocu web arayüzüne sürükleyip bırakın veya seçin.
+2.  **Akıllı İşleme (Backend):**
+    *   Dosya tipi kontrol edilir. XML ise doğrudan ayrıştırılır.
+    *   PDF/Resim ise güvenli bir şekilde backend'e gönderilir.
+    *   Backend, Gemini 2.5 Pro API'sini kullanarak metin okuma (OCR) ve veri çıkarma işlemlerini gerçekleştirir.
+    *   Otomatik veri doğrulama kuralları uygulanır.
+3.  **Doğrulama (Frontend):** İşlenen veriler, fatura görseli ile birlikte kullanıcı arayüzünde sunulur. Kullanıcı, verileri hızla gözden geçirir, gerekirse düzeltir ve onaylar.
+4.  **Aktarım:** Onaylanan veriler, tek bir tıklama ile yapılandırılmış Excel dosyası olarak indirilir.
+
+## Teknoloji Mimarisi
+
+*   **Backend:** Python 3.x, Flask
+*   **AI Model:** Google Gemini 2.5 Pro Preview (via Google AI API)
+*   **Frontend:** HTML5, CSS3, JavaScript
+*   **Veri İşleme:** Pandas (Excel için), lxml (XML için)
+*   **PDF İşleme:** PyMuPDF (veya benzeri)
+*   **API İletişimi:** Google AI Python SDK, Requests
+
+## Gereksinimler
+
+*   **Google Gemini API Anahtarı:** Fatrocu'nun AI yeteneklerini kullanabilmek için bir Google Gemini API anahtarına ihtiyacınız vardır.
+    *   [Google AI Studio](https://aistudio.google.com/app/apikey) üzerinden **ücretsiz** bir anahtar edinebilirsiniz. Ücretsiz katman genellikle orta düzey kullanım için yeterlidir.
+    *   API anahtarı, uygulamanın ayarlar bölümünden **güvenli bir şekilde backend'e kaydedilecektir.**
+
+## Kullanım
+
+1.  Fatrocu web uygulamasına tarayıcınızdan erişin: <a href="https://nec0ti.github.io/Fatrocu">Fatrocu</a>
+2.  İlk kullanımda veya gerektiğinde, Ayarlar bölümünden Google Gemini API anahtarınızı girin (Bu anahtar sunucu tarafında güvenle saklanacaktır).
+3.  Ana sayfada fatura dosyalarınızı yükleme alanına sürükleyip bırakın veya dosya seçiciyi kullanın.
+4.  İşlem tamamlandığında, faturanızı listeden seçerek doğrulama ekranına geçin.
+5.  Çıkarılan verileri kontrol edin, gerekirse düzeltin ve "Onayla" butonuna tıklayın.
+6.  "Excel'e Aktar" butonu ile onaylanmış verileri indirin.
+
+## Doğruluk Üzerine Not
+
+Finansal verilerde doğruluk kritik öneme sahiptir. Fatrocu, e-Faturalar için %100'e yakın doğruluk hedeflerken, PDF/Resim formatları için Gemini 2.5 Pro ve akıllı doğrulama mekanizmaları ile mümkün olan en yüksek doğruluğu sağlamayı amaçlar. Ancak AI ve OCR teknolojilerinin doğası gereği %100 garanti edilemez. Fatrocu'nun asıl gücü, veri girişini **büyük ölçüde otomatikleştirerek** size zaman kazandırmak ve **hızlı, kolay bir son kontrol/doğrulama** imkanı sunmaktır.
+
+## Yol Haritası / Gelecek Planları
+
+*   [ ] **Gelişmiş Veri Çıkarma:** Ürün/Hizmet kalemleri, para birimi, ödeme vadesi, IBAN gibi ek alanların çıkarılması.
+*   [ ] **ÖKC Fişi Optimizasyonu:** Yazar kasa fişleri için özel analiz ve doğruluk iyileştirmeleri.
+*   [ ] **Fatura Görseli Üzerinde İşaretleme:** AI'ın bulduğu verinin faturanın neresinden alındığını görsel olarak vurgulama.
+*   [ ] **Model İyileştirme:** Gemini prompt'larının sürekli optimizasyonu ve potansiyel olarak model fine-tuning (ileride).
+*   [ ] **Kullanıcı Tanımlı Alanlar:** Kullanıcıların çıkarmak istedikleri özel alanları tanımlayabilmesi.
+*   [ ] **Toplu İşlem (Batch Processing):** Birden fazla faturayı aynı anda yükleyip işleme ve onaylama.
+*   [ ] **Muhasebe Yazılımı Entegrasyonları:** Popüler muhasebe programlarına doğrudan veri gönderme seçenekleri (API veya dosya formatı ile).
+*   [ ] **Gelişmiş Raporlama/Dashboard:** İşlenen faturalara dair temel istatistikler sunma.
+
+## Katkıda Bulunma
+
+Katkılarınız memnuniyetle karşılanır! Projeyi geliştirmeye yardımcı olmak isterseniz, lütfen repoyu forklayın, değişikliklerinizi yapın ve bir pull request gönderin. Hataları bildirmek veya yeni özellikler önermek için issue açmaktan çekinmeyin.
+
+## Lisans
+
+Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için `LICENSE` dosyasına bakın.
+
+---
+
+*Fatrocu ile fatura işlemlerinizi akıllandırın ve değerli zamanınızı geri kazanın!*
