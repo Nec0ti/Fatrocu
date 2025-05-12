@@ -1,0 +1,17 @@
+Flask
+python-dotenv
+google-generativeai
+requests
+pandas
+openpyxl
+lxml
+
+PyMuPDF
+
+Pillow
+
+Werkzeug
+click
+itsdangerous
+Jinja2
+MarkupSafe
