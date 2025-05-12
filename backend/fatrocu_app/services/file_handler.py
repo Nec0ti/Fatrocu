@@ -1,5 +1,4 @@
 import os
-import magic # Dosya tipini içerikten anlamak için (pip install python-magic)
 from werkzeug.utils import secure_filename
 import mimetypes
 from flask import current_app
