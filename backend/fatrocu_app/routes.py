@@ -110,7 +110,7 @@ def export_excel_route(filename): # Fonksiyon adını route'dan ayırmak iyi pra
              print(f"Oluşturulan Excel dosyası bulunamadı: {excel_filepath}")
              return jsonify(error="Oluşturulan Excel dosyası gönderilemedi."), 404
         except Exception as e:
-             print(f"Excel gönderilirken hata: {e}")
-             return jsonify(error=f"Excel gönderilirken sunucu hatası: {str(e)}"), 500
+             current_app.logger.error(f"Excel gönderilirken hata: {e}")
+             return jsonify(error="Excel gönderilirken sunucu hatası oluştu."), 500
     else:
         return jsonify(error="Excel dosyası oluşturulamadı veya bulunamadı."), 500
