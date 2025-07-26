@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
     
     // This sets the base path for deployment. It's crucial for GitHub Pages.
     // It should match your repository name.
-    base: '/fatrocu-v2/', 
+    base: '/fatrocu/', 
 
     define: {
       // This makes the API key available in your app's code as `process.env.API_KEY`.
