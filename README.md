@@ -13,9 +13,9 @@
 ---
 
 ### 🎬 Uygulama Demosu
+*(Bu alana uygulamanın işleyişini gösteren bir GIF eklenebilir)*
 
-
-![Fatrocu v2 Demo GIF]()
+![Fatrocu v2 Demo GIF](https://user-images.githubusercontent.com/10292857/191752077-b8471c2b-e14f-442a-a20c-87d77051f62c.gif)
 
 
 ## ✨ Temel Özellikler
