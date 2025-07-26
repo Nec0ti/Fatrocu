@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # Trigger the workflow on pushes to the main branch
+    branches: [ master ] # Trigger the workflow on pushes to the main branch
   workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
 
 permissions:
@@ -26,7 +26,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }} # Use the secret here
+          API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }} # Use the secret here
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
