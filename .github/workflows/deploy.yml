@@ -26,7 +26,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }} # Use the secret here
+          GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }} # Use the secret here
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
