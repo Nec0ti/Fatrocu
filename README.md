@@ -1,4 +1,3 @@
-
 # 🤖 Fatrocu v2 - Akıllı Fatura İşleme Asistanı
 
 <div align="center">
@@ -13,9 +12,8 @@
 ---
 
 ### 🎬 Uygulama Demosu
-*(Bu alana uygulamanın işleyişini gösteren bir GIF eklenebilir)*
+![fatrocu demo](https://github.com/user-attachments/assets/dc30f820-33d7-4373-a96d-092164348bbc)
 
-![Fatrocu v2 Demo GIF](https://user-images.githubusercontent.com/10292857/191752077-b8471c2b-e14f-442a-a20c-87d77051f62c.gif)
 
 
 ## ✨ Temel Özellikler
