@@ -1,16 +1,23 @@
-# backend/.gitignore
-venv/
-__pycache__/
-*.pyc
-*.pyo
-.env
-.flaskenv # Bazen hassas bilgi içerebilir
-uploads/
-output/
-instance/ # Flask instance folder
-*.sqlite3 # Eğer veritabanı kullanırsanız
-
-# Kök .gitignore (gerekirse ekler)
-.vscode/
-.idea/
+# Logs
+logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
