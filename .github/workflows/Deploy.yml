@@ -33,7 +33,7 @@ jobs:
       - name: Build project
         run: npm run build
         env:
-          API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Verify dist folder
         run: ls -la ./dist
