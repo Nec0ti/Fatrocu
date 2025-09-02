@@ -2,7 +2,7 @@
 import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 import { ExtractedInvoiceFields, KdvDetail, GroundedValue } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY_PLACEHOLDER" });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const fileToGenerativePart = (file: File): Promise<{ inlineData: { data: string; mimeType: string; }; }> => {
     return new Promise((resolve, reject) => {
