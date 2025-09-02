@@ -2,45 +2,24 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ master ] # Trigger the workflow on pushes to the main branch
-  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+    branches:
+      - main # Sadece main branch'e push yapıldığında çalışır
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
-        env:
-          GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }} # Use the secret here
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist' # The folder Vite builds to
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Replace API Key Placeholder
+        run: |
+          # macOS/BSD sed ile uyumluluk için -i '' kullanılır. Linux'ta -i yeterlidir.
+          # GitHub Actions Ubuntu kullandığı için -i yeterli olacaktır.
+          find ./services -type f -name "*.ts" -exec sed -i "s|GEMINI_API_KEY_PLACEHOLDER|${{ secrets.GEMINI_API_KEY }}|g" {} +
+        
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./ # Projenin ana dizinini yayınla
