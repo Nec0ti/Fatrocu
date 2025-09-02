@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Sadece main branch'e push yapıldığında çalışır
+      - main
 
 jobs:
   deploy:
@@ -22,4 +22,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./ # Projenin ana dizinini yayınla
+          publish_dir: ./
