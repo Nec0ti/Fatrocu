@@ -63,5 +63,5 @@ Fatrocu, modern web teknolojileri ve Google Gemini yapay zekasını kullanarak f
 -   ** [ ] Gelişmiş Hata Yönetimi:** Yapay zekanın veri çıkaramadığı durumlarda kullanıcıya daha açıklayıcı geri bildirimler sunma.
 
 ### Sürüm 3.0.0
--   ** [ ] Bulut Senkronizasyonu:** Kullanıcıların verilerini isteğe bağlı olarak bir bulut hesabıyla (örn. Google Drive, Dropbox) senkronize ederek farklı cihazlardan erişim sağlaması.
+-   ** [ ] Bulut Senkronizasyonu:** Kullanıcıların verilerini isteğe bağlı olarak bir bulut hesabıyla (örn. Nextcloud, Google Drive, Dropbox) senkronize ederek farklı cihazlardan erişim sağlaması.
 -   ** [ ] E-posta Entegrasyonu:** Belirlenen bir e-posta adresine gelen fatura eklerini otomatik olarak işleme yeteneği.
