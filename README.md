@@ -1,96 +1,67 @@
-# 🤖 Fatrocu v2 - Akıllı Fatura İşleme Asistanı
+# Fatrocu v2 - Akıllı Fatura İşleme
 
-<div align="center">
-  <img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react" alt="React" />
-  <img src="https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Google-Gemini_API-blueviolet?style=for-the-badge&logo=google-gemini" alt="Gemini API" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-3-cyan?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS" />
-</div>
+**Sürüm:** 2.2.0
 
-**Fatrocu v2, faturalarınızı (XML, PDF, Resim) akıllıca işleyen, verileri Google Gemini AI ile çıkaran ve düzenli bir şekilde dışa aktarmanızı sağlayan modern bir web uygulamasıdır.**
+Fatrocu, modern web teknolojileri ve Google Gemini yapay zekasını kullanarak fatura (PDF, Resim, XML) işleme sürecini otomatikleştiren, tarayıcı tabanlı bir uygulamadır. Kullanıcıların faturalarını kolayca yükleyip, verilerini anında çıkarmasını, kontrol edip düzeltmesini ve son olarak toplu halde Excel'e aktarmasını sağlar.
+
+ <!-- Buraya uygulamanın bir ekran görüntüsü linki eklenebilir. -->
 
 ---
 
-### 🎬 Uygulama Demosu
-![fatrocu demo](https://github.com/user-attachments/assets/dc30f820-33d7-4373-a96d-092164348bbc)
+## Temel Özellikler
 
-
-
-## ✨ Temel Özellikler
-
--   📄 **Çoklu Dosya Desteği:** PDF, XML, PNG, ve JPEG gibi yaygın fatura formatlarını sorunsuzca işler.
--   🧠 **Yapay Zeka Destekli Veri Çıkarma:** Google Gemini API'sinin gücüyle faturalardan temel bilgileri (Fatura No, Tarih, Taraflar, Tutarlar, Fatura Türü vb.) otomatik olarak çıkarır.
--   🎨 **Etkileşimli Veri Doğrulama:** AI tarafından çıkarılan verileri, faturanın canlı önizlemesiyle yan yana kontrol etme ve düzenleme imkanı sunar. Alana tıkladığınızda faturadaki konumu anında vurgulanır.
--   📤 **Tek Tıkla CSV Aktarımı:** Onayladığınız tüm fatura verilerini, tek bir tıklamayla düzenli ve standart bir CSV dosyası olarak indirin.
--   ⏳ **Akıllı API Kuyruk Sistemi:** Yoğun API kullanımı durumunda (rate limit), uygulama otomatik olarak duraklar, 60 saniye bekler ve kaldığı yerden devam eder. Bu, çok sayıda faturanın sorunsuzca işlenmesini sağlar.
--   💾 **Kalıcı Oturum:** Tarayıcının `localStorage` özelliği sayesinde, işlediğiniz faturalar siz sekmeyi kapatsanız veya sayfayı yenileseniz bile kaybolmaz.
--   💅 **Modern ve Duyarlı Arayüz:** Karanlık tema ve Tailwind CSS ile geliştirilmiş şık, sezgisel ve kullanışlı bir tasarıma sahiptir.
-
-## 🚀 İş Akışı (Workflow)
-
-1.  **Yükleme:** Dosyalarınızı sürükleyip bırakın veya seçin.
-2.  **İşleme:** Sistem dosyaları sıraya alır ve Gemini AI aracılığıyla verileri otomatik olarak çıkarır.
-3.  **Kontrol:** "Kontrol & Dışa Aktar" ekranında, çıkarılan verileri faturanın önizlemesiyle karşılaştırın, düzenleyin ve onaylayın.
-4.  **Yönetim:** Onaylanmış faturaları "Onaylananlar" sekmesinde görüntüleyin, gerekirse silin veya kontrole geri alın.
-5.  **Dışa Aktarma:** Onayladığınız tüm verileri tek bir tuşla `YYYY-AA-GG_onaylanan_faturalar.csv` formatında indirin.
-
-## 🛠️ Teknoloji Stack'i
-
--   **Frontend:** React 19, TypeScript
--   **Yapay Zeka:** Google Gemini API (`@google/genai`)
--   **Styling:** Tailwind CSS
--   **Modül Yönetimi:** ES Modules (ESM) via `esm.sh`
--   **Veri Saklama:** Tarayıcı `localStorage` API
-
-## ⚙️ Kurulum ve Çalıştırma
-
-Bu uygulama, tüm bağımlılıkların bir web tabanlı geliştirme ortamı tarafından otomatik olarak sağlandığı bir platformda çalışacak şekilde tasarlanmıştır.
-
-Yerel bir makinede çalıştırmak için temel adımlar şunlardır:
-
-1.  **API Anahtarını Ayarlama:**
-    Uygulamanın Google Gemini API'si ile iletişim kurabilmesi için geçerli bir API anahtarına ihtiyacı vardır. Bu anahtarın bir ortam değişkeni (environment variable) olarak ayarlanması gerekmektedir. Proje kök dizininde `.env` dosyası oluşturup içine ekleyin:
-    ```bash
-    API_KEY="YOUR_GEMINI_API_KEY"
-    ```
-    > **Not:** Uygulama, `process.env.API_KEY` üzerinden bu anahtara erişir.
-
-2.  **Bağımlılıklar:**
-    Proje `package.json` dosyası içermediğinden, bağımlılıklar `index.html` içerisindeki `importmap` aracılığıyla CDN (`esm.sh`) üzerinden dinamik olarak çekilir. Ek bir `npm install` adımına gerek yoktur.
-
-3.  **Uygulamayı Başlatma:**
-    `index.html` dosyasını sunacak basit bir yerel sunucu (örneğin, VS Code **Live Server** eklentisi veya `npx serve`) çalıştırın.
-
-## 📂 Proje Yapısı
-
-```
-.
-├── index.html              # Ana HTML dosyası, importmap ve başlangıç noktası
-├── index.tsx               # React uygulamasının root render dosyası
-├── App.tsx                 # Ana uygulama bileşeni (state yönetimi, yönlendirme)
-├── README.md               # Proje tanıtım dosyası
-├── types.ts                # TypeScript arayüzleri ve enum'ları (Invoice, Status vb.)
-├── utils.ts                # Yardımcı fonksiyonlar (base64 dönüştürme, URL oluşturma)
-├── services/
-│   └── apiService.ts       # Gemini API çağrıları ve CSV dışa aktarma mantığı
-└── components/
-    ├── Header.tsx          # Sayfa başlığı ve ana navigasyon
-    ├── FileUploadArea.tsx  # Dosya yükleme bileşeni
-    ├── CheckView.tsx       # Veri kontrol ve düzenleme ekranı
-    ├── ReviewedView.tsx    # Onaylanmış faturaların listelendiği ekran
-    ├── ProcessedInvoiceCard.tsx # Tek bir faturanın durumunu gösteren kart
-    ├── ConfirmationModal.tsx # Silme/geri alma işlemleri için onay penceresi
-    ├── AlertMessage.tsx    # Başarı/hata bildirimleri
-    └── Spinner.tsx         # Yüklenme animasyonu
-```
-
-## 🔮 Gelecek Planları (Roadmap)
-
--   [ ] **Gelişmiş Arama ve Filtreleme:** Faturaları tarihe, tutara veya satıcıya göre arama.
--   [ ] **Farklı Dışa Aktarma Formatları:** Excel (.xlsx) veya JSON olarak dışa aktarma seçeneği.
--   [ ] **Kullanıcı Hesapları:** Çoklu kullanıcı desteği ve kişisel fatura yönetimi.
--   [ ] **Dashboard:** Toplam tutarlar, en sık işlem yapılan satıcılar gibi istatistiksel verilerin görselleştirildiği bir ana sayfa.
--   [ ] **Testler:** Uygulama kararlılığını artırmak için birim ve entegrasyon testleri eklemek.
+- **Çoklu Format Desteği:** PDF, PNG, JPEG ve XML formatındaki faturaları sorunsuz bir şekilde işler.
+- **Yapay Zeka Destekli Veri Çıkarma:** Google Gemini (`gemini-2.5-flash`) modeli sayesinde fatura numarası, tarih, satıcı/alıcı bilgileri, KDV detayları ve genel toplam gibi kritik verileri yüksek doğrulukla otomatik olarak çıkarır.
+- **Etkileşimli Kontrol Arayüzü:** Yüklenen faturanın önizlemesi ile yapay zeka tarafından çıkarılan verileri yan yana göstererek kolay ve hızlı bir kontrol süreci sunar.
+- **Veri Düzeltme ve Onaylama:** Kullanıcılar, çıkarılan verilerde gerekli gördükleri düzeltmeleri yapabilir ve faturayı "onaylandı" olarak işaretleyebilir.
+- **Toplu Excel Aktarımı:** Onaylanmış tüm faturaların verilerini tek bir tıklama ile düzenli bir Excel (.xlsx) dosyasına aktarır.
+- **Tarayıcıda Kalıcılık:** Tüm fatura bilgileri ve dosya verileri tarayıcının `localStorage`'ında saklanır, böylece sayfayı yenileseniz veya kapatsanız bile verileriniz kaybolmaz.
+- **Modern ve Kullanıcı Dostu Arayüz:** Tailwind CSS ile oluşturulmuş şık, duyarlı ve koyu tema bir tasarıma sahiptir.
 
 ---
-*Bu proje, fatura işleme süreçlerini otomatize etmek ve basitleştirmek için tasarlanmıştır.*
+
+## İş Akışı (Workflow)
+
+1.  **Yükleme:** Kullanıcı, ana sayfadaki sürükle-bırak alanına bir veya daha fazla fatura dosyası yükler.
+2.  **İşleme Kuyruğu:** Yüklenen her dosya bir işlem kuyruğuna eklenir ve sırayla işlenir. Bu sırada kullanıcı arayüzde dosyanın durumunu ("Sırada", "Yapay Zeka İşliyor...") anlık olarak takip edebilir.
+3.  **Veri Çıkarma:** Sırası gelen fatura, Google Gemini API'sine gönderilir. Yapay zeka, fatura içeriğini analiz eder ve yapılandırılmış verileri (JSON formatında) geri döndürür.
+4.  **Kontrol ve Onay:** İşlem başarılı olduğunda, fatura "Kontrol Bekliyor" durumuna geçer ve "Kontrol Et" sekmesinde listelenir. Kullanıcı faturayı seçerek detay sayfasına gider.
+5.  **Düzeltme:** Detay sayfasında, fatura önizlemesi ve çıkarılan verilerin olduğu form yan yana görüntülenir. Kullanıcı, formdaki verileri kontrol eder ve gerekirse düzenler.
+6.  **Kaydet ve Onayla:** Kullanıcı "Kaydet ve Onayla" butonuna tıkladığında, yapılan değişiklikler kaydedilir ve fatura "Onaylandı" durumuna geçer.
+7.  **Toplu Aktarım:** Kullanıcı, dilediği zaman "Toplu Aktar" butonuna tıklayarak onaylanmış tüm faturaları tek bir Excel dosyası olarak indirir. Aktarım sonrası bu faturalar listeden temizlenir.
+
+---
+
+## Teknoloji Stack'i
+
+-   **Frontend:**
+    -   **React:** Kullanıcı arayüzü oluşturmak için kullanılan temel kütüphane.
+    -   **TypeScript:** Statik tipleme ile daha güvenli ve ölçeklenebilir kod yazımı için.
+    -   **Tailwind CSS:** Hızlı ve modern tasarımlar için kullanılan bir CSS çatısı.
+-   **Yapay Zeka:**
+    -   **Google Gemini API (@google/genai):** Fatura görsellerinden ve belgelerinden veri çıkarmak için kullanılan `gemini-2.5-flash` modeli.
+-   **Kütüphaneler:**
+    -   **xlsx:** Tarayıcı tarafında dinamik olarak Excel dosyaları oluşturmak için.
+-   **Platform:**
+    -   Uygulama tamamen istemci (tarayıcı) tarafında çalışır. Sunucuya ihtiyaç duymaz (Gemini API hariç).
+    -   **Vite/esbuild (ESM.sh aracılığıyla):** Hızlı ve modern bir geliştirme ve derleme altyapısı.
+-   **Veri Depolama:**
+    -   **Browser `localStorage`:** Oturum kalıcılığı sağlamak, fatura verilerini ve dosya önbelleğini saklamak için.
+
+---
+
+## Gelecek Planları (Roadmap)
+
+### Sürüm 2.3.0
+-   **[ ] Gelişmiş Dışa Aktarma Seçenekleri:** CSV formatında dışa aktarma ve kullanıcıların sütunları özelleştirebileceği basit şablonlar.
+-   **[ ] Toplu Düzenleme:** Birden fazla faturanın ortak alanlarını (örneğin satıcı adı) tek seferde düzenleme imkanı.
+-   **[ ] Arama ve Filtreleme:** İşlem geçmişindeki faturalar arasında fatura numarası, tarih veya tutara göre arama ve filtreleme yapma.
+
+### Sürüm 2.4.0
+-   **[ ] İstatistik Paneli (Dashboard):** Aylık toplamlar, satıcılara göre harcama dağılımı gibi temel görsel istatistikler sunan bir panel.
+-   **[ ] Çoklu Dil Desteği:** Arayüz için İngilizce dil seçeneği eklenmesi.
+-   **[ ] Gelişmiş Hata Yönetimi:** Yapay zekanın veri çıkaramadığı durumlarda kullanıcıya daha açıklayıcı geri bildirimler sunma.
+
+### Sürüm 3.0.0
+-   **[ ] Bulut Senkronizasyonu:** Kullanıcıların verilerini isteğe bağlı olarak bir bulut hesabıyla (örn. Google Drive, Dropbox) senkronize ederek farklı cihazlardan erişim sağlaması.
+-   **[ ] E-posta Entegrasyonu:** Belirlenen bir e-posta adresine gelen fatura eklerini otomatik olarak işleme yeteneği.

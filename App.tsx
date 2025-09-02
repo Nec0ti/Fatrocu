@@ -1,278 +1,342 @@
-
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Header } from './components/Header';
-import { FileUploadArea } from './components/FileUploadArea';
-import { ProcessedInvoiceCard } from './components/ProcessedInvoiceCard';
-import { CheckView } from './components/CheckView';
-import { ReviewedView } from './components/ReviewedView';
-import { ProcessedInvoice, FileProcessingStatus } from './types';
-import { uploadAndProcessInvoice, RateLimitError } from './services/apiService';
-import { createFileDataUrl, fileToBase64, base64ToBlobUrl } from './utils';
-import { Spinner } from './components/Spinner';
-import { ConfirmationModal } from './components/ConfirmationModal';
+import { Footer } from './components/Footer';
+import { AlertMessage } from './components/AlertMessage';
+import { CheckInvoicePage } from './pages/CheckInvoicePage';
+import { UploadPage } from './pages/UploadPage';
+import { ReviewPage } from './pages/ReviewPage';
+import { ProcessedInvoice, FileProcessingStatus, ExtractedInvoiceFields, ReviewStatus } from './types';
+import { uploadInvoiceFile, downloadInvoicesAsExcel } from './services/apiService';
 
+// Constants for Local Storage keys
+const LOCAL_STORAGE_KEYS = {
+  INVOICES: 'fatrocu_v2_invoices',
+  FILE_CACHE: 'fatrocu_v2_fileCache',
+};
+
+// Helper to convert dataUrl back to a File object for previewing and reprocessing
+const dataUrlToFile = (dataUrl: string, filename: string, mimeType: string): File => {
+  const arr = dataUrl.split(',');
+  const byteString = atob(arr[1]);
+  let n = byteString.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = byteString.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mimeType });
+};
+
+// Main App Component
 const App: React.FC = () => {
-  const [invoices, setInvoices] = useState<ProcessedInvoice[]>([]);
-  const [view, setView] = useState<'main' | 'check' | 'reviewed'>('main');
-  const [debugMode, setDebugMode] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [pendingAction, setPendingAction] = useState<{ action: 'delete' | 'revert', invoiceId: string } | null>(null);
-  
-  // State for queue management
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isPausedForRateLimit, setIsPausedForRateLimit] = useState(false);
+  const [processedInvoices, setProcessedInvoices] = useState<ProcessedInvoice[]>([]);
+  const [fileCache, setFileCache] = useState<Map<string, string>>(new Map()); // Caches file data URLs
+  const [globalError, setGlobalError] = useState<string | null>(null);
+  const [globalSuccess, setGlobalSuccess] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<'upload' | 'review'>('upload');
+  const [currentInvoiceId, setCurrentInvoiceId] = useState<string | null>(null);
+  const [uploadQueue, setUploadQueue] = useState<string[]>([]); // Queue of invoice IDs
+  const [isProcessingQueue, setIsProcessingQueue] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const deletedInvoiceIds = useRef(new Set<string>()); // Tracks IDs deleted during the session to solve race conditions
 
-
-  // Load invoices from localStorage on initial render and regenerate preview URLs
+  // Effect to load state from localStorage on initial mount
   useEffect(() => {
-    console.log("[App] Component mounting. Loading invoices from localStorage.");
     try {
-      const savedInvoicesRaw = localStorage.getItem('invoices');
-      if (savedInvoicesRaw) {
-        const savedInvoices: ProcessedInvoice[] = JSON.parse(savedInvoicesRaw);
-        console.log(`[App] Loaded ${savedInvoices.length} invoices. Regenerating preview URLs...`);
-        
-        const invoicesWithUrls = savedInvoices.map(invoice => {
-          if (invoice.fileContentBase64) {
-            try {
-              const newUrl = base64ToBlobUrl(invoice.fileContentBase64, invoice.fileType);
-              return { ...invoice, fileDataUrl: newUrl };
-            } catch (urlError) {
-              console.error(`[App] Could not create blob URL for ${invoice.fileName}`, urlError);
-              return invoice;
-            }
+      const storedInvoicesJSON = localStorage.getItem(LOCAL_STORAGE_KEYS.INVOICES);
+      const invoicesFromStorage: ProcessedInvoice[] = storedInvoicesJSON ? JSON.parse(storedInvoicesJSON) : [];
+      
+      const storedCacheJSON = localStorage.getItem(LOCAL_STORAGE_KEYS.FILE_CACHE);
+      const newFileCache = new Map<string, string>(storedCacheJSON ? JSON.parse(storedCacheJSON) : []);
+      
+      const newUploadQueue: string[] = [];
+      const updatedInvoices = invoicesFromStorage.map(invoice => {
+        if (invoice.status === FileProcessingStatus.PROCESSING || invoice.status === FileProcessingStatus.QUEUED) {
+          if (newFileCache.has(invoice.id)) { // Only queue if file data exists
+            newUploadQueue.push(invoice.id);
+            return { ...invoice, status: FileProcessingStatus.QUEUED };
           }
-          return invoice;
-        });
+          // If file data is missing, mark as error
+          return { ...invoice, status: FileProcessingStatus.ERROR, errorMessage: "Tarayıcı belleği temizlendiği için dosya verisi kayboldu. Lütfen tekrar yükleyin."};
+        }
+        return invoice;
+      });
 
-        setInvoices(invoicesWithUrls);
-        console.log("[App] Finished regenerating URLs for previews.");
-      } else {
-        console.log("[App] No invoices found in localStorage.");
-      }
+      setProcessedInvoices(updatedInvoices);
+      setFileCache(newFileCache);
+      setUploadQueue(prev => [...prev, ...newUploadQueue]);
     } catch (error) {
-      console.error("[App] Failed to load or process invoices from localStorage", error);
+      console.error("Yerel depodan veri yüklenirken hata oluştu:", error);
+      setGlobalError("Uygulama verileri yüklenemedi. Tarayıcı ayarlarınızı kontrol edin.");
     } finally {
-        setIsLoaded(true);
+      setIsInitialized(true);
     }
   }, []);
 
-  // Save invoices to localStorage whenever they change
-  const updateAndSaveInvoices = useCallback((updater: ProcessedInvoice[] | ((prev: ProcessedInvoice[]) => ProcessedInvoice[])) => {
-    setInvoices(prev => {
-        const newInvoices = typeof updater === 'function' ? updater(prev) : updater;
-        try {
-            const storableInvoices = newInvoices.map(({ fileDataUrl, ...rest }) => rest);
-            localStorage.setItem('invoices', JSON.stringify(storableInvoices));
-        } catch (error) {
-            console.error("[App] Failed to save invoices to localStorage", error);
-        }
-        if (debugMode) {
-          console.log('[App Debug] New state:', newInvoices);
-        }
-        return newInvoices;
-    });
-  }, [debugMode]);
-
-  // Adds a file to the processing queue
-  const handleFileSubmit = useCallback(async (file: File) => {
-    const tempId = `temp-${Date.now()}-${file.name}`;
-    console.log(`[App] Queuing file ${file.name} with temp ID: ${tempId}`);
-    
-    const fileDataUrl = await createFileDataUrl(file);
-    const fileContentBase64 = await fileToBase64(file);
-
-    const newInvoiceEntry: ProcessedInvoice = {
-      id: tempId,
-      fileName: file.name,
-      fileType: file.type,
-      status: FileProcessingStatus.QUEUED,
-      isReviewed: false,
-      fileDataUrl,
-      fileContentBase64,
-    };
-
-    updateAndSaveInvoices(currentInvoices => [newInvoiceEntry, ...currentInvoices]);
-  }, [updateAndSaveInvoices]);
-
-  // Effect to manage and process the queue
+  // Effect to save invoices to localStorage
   useEffect(() => {
-    const processQueue = async () => {
-      if (isProcessing || isPausedForRateLimit) {
-        return; // Don't process if already busy or paused
-      }
+    if (!isInitialized) return;
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEYS.INVOICES, JSON.stringify(processedInvoices));
+    } catch (error) {
+      console.error("Faturalar yerel depoya kaydedilirken hata oluştu:", error);
+    }
+  }, [processedInvoices, isInitialized]);
 
-      const nextInvoice = invoices.find(inv => inv.status === FileProcessingStatus.QUEUED);
-      if (!nextInvoice) {
-        return; // No items in queue
-      }
-      
-      setIsProcessing(true);
-      console.log(`[App Queue] Processing next invoice: ${nextInvoice.id}`);
+  // Effect to save file cache to localStorage
+  useEffect(() => {
+    if (!isInitialized) return;
+    try {
+      const cacheArray = Array.from(fileCache.entries());
+      localStorage.setItem(LOCAL_STORAGE_KEYS.FILE_CACHE, JSON.stringify(cacheArray));
+    } catch (error) {
+      console.error("Dosya önbelleği yerel depoya kaydedilirken hata oluştu:", error);
+    }
+  }, [fileCache, isInitialized]);
 
-      // Update status to PROCESSING
-      updateAndSaveInvoices(currentInvoices =>
-        currentInvoices.map(inv =>
-          inv.id === nextInvoice.id ? { ...inv, status: FileProcessingStatus.PROCESSING } : inv
-        )
-      );
-      
-      try {
-        if (!nextInvoice.fileDataUrl) throw new Error("File data URL is missing.");
-
-        // Reconstruct the file object from the blob URL
-        const fileBlob = await (await fetch(nextInvoice.fileDataUrl)).blob();
-        const file = new File([fileBlob], nextInvoice.fileName, { type: nextInvoice.fileType });
-        
-        const result = await uploadAndProcessInvoice(file);
-        
-        console.log(`[App Queue] API call successful for ${nextInvoice.id}`);
-        const finalInvoice: Partial<ProcessedInvoice> = {
-            status: result.status || FileProcessingStatus.AWAITING_REVIEW,
-            extractedData: result.extractedData,
-            errorMessage: result.errorMessage,
-        };
-        updateAndSaveInvoices(currentInvoices =>
-          currentInvoices.map(inv => (inv.id === nextInvoice.id ? { ...inv, ...finalInvoice } : inv))
-        );
-        
-      } catch (error) {
-        console.error(`[App Queue] Processing error for ${nextInvoice.id}:`, error);
-        
-        if (error instanceof RateLimitError) {
-          console.warn("[App Queue] Rate limit detected. Pausing for 60 seconds.");
-          setIsPausedForRateLimit(true);
-          // Set invoice status back to QUEUED to be re-processed
-          updateAndSaveInvoices(currentInvoices =>
-              currentInvoices.map(inv => (inv.id === nextInvoice.id ? { ...inv, status: FileProcessingStatus.QUEUED } : inv))
-          );
-          setTimeout(() => {
-              console.log("[App Queue] Resuming queue processing.");
-              setIsPausedForRateLimit(false);
-          }, 60000);
-        } else {
-          // Handle other, non-retriable errors
-          const errorMessage = error instanceof Error ? error.message : 'Bilinmeyen bir hata oluştu.';
-          const errorInvoice: Partial<ProcessedInvoice> = {
-            status: FileProcessingStatus.ERROR,
-            errorMessage: `İşleme hatası: ${errorMessage}`,
-          };
-          updateAndSaveInvoices(currentInvoices =>
-            currentInvoices.map(inv => (inv.id === nextInvoice.id ? { ...inv, ...errorInvoice } : inv))
-          );
-        }
-      } finally {
-        setIsProcessing(false);
-      }
-    };
-    
-    processQueue();
-  }, [invoices, isProcessing, isPausedForRateLimit, updateAndSaveInvoices]);
-  
-  // Handlers for the confirmation modal flow
-  const handleRequestDelete = (invoiceId: string) => {
-    setPendingAction({ action: 'delete', invoiceId });
-  };
-  
-  const handleRequestRevert = (invoiceId: string) => {
-    setPendingAction({ action: 'revert', invoiceId });
+  const clearAlerts = () => {
+    setGlobalError(null);
+    setGlobalSuccess(null);
   };
 
-  const handleConfirmAction = () => {
-    if (!pendingAction) return;
-    const { action, invoiceId } = pendingAction;
+  const handleFileSubmit = useCallback((files: File[]) => {
+    clearAlerts();
+    const newInvoiceEntries: ProcessedInvoice[] = [];
+    const newQueueIds: string[] = [];
 
-    if (action === 'delete') {
-      updateAndSaveInvoices(prevInvoices => 
-        prevInvoices.filter(inv => inv.id !== invoiceId)
-      );
-    } else if (action === 'revert') {
-      updateAndSaveInvoices(prevInvoices => 
-        prevInvoices.map(inv => 
-          inv.id === invoiceId 
-              ? { ...inv, isReviewed: false, status: FileProcessingStatus.AWAITING_REVIEW } 
+    const filePromises = files.map(file => {
+      const tempId = `inv-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      newInvoiceEntries.push({
+        id: tempId,
+        fileName: file.name,
+        fileType: file.type,
+        status: FileProcessingStatus.QUEUED,
+      });
+      newQueueIds.push(tempId);
+      
+      return new Promise<[string, string]>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve([tempId, reader.result as string]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(filePromises).then(cachedFiles => {
+      setFileCache(prev => new Map([...prev, ...cachedFiles]));
+      setProcessedInvoices(prev => [...newInvoiceEntries, ...prev]);
+      setUploadQueue(prev => [...prev, ...newQueueIds]);
+    }).catch(err => {
+        console.error("Dosya okunurken hata:", err);
+        setGlobalError("Bazı dosyalar okunurken bir hata oluştu ve işleme alınamadı.");
+    });
+  }, []);
+
+  const processFile = async (invoiceId: string, file: File) => {
+    // Set status to PROCESSING
+    setProcessedInvoices(prevInvoices =>
+      prevInvoices.map(inv =>
+        inv.id === invoiceId ? { ...inv, status: FileProcessingStatus.PROCESSING } : inv
+      )
+    );
+
+    const result = await uploadInvoiceFile(file, invoiceId);
+
+    const finalResult =
+      result.status === FileProcessingStatus.SUCCESS
+        ? { ...result, reviewStatus: 'pending' as ReviewStatus }
+        : result;
+
+    if (deletedInvoiceIds.current.has(invoiceId)) {
+        console.warn(`YARIŞ DURUMU ENGELLENDİ: Fatura ${invoiceId} işlenirken silindi. Durum güncellemesi iptal edildi.`);
+    } else {
+        setProcessedInvoices(prevInvoices => {
+            // Check if the invoice still exists before updating, as another process might have removed it.
+            if (!prevInvoices.some(inv => inv.id === invoiceId)) {
+                return prevInvoices; 
+            }
+
+            if (result.status === FileProcessingStatus.SUCCESS) {
+                setGlobalSuccess(`'${file.name}' başarıyla işlendi. Kontrol bekleniyor.`);
+            } else {
+                setGlobalError(result.errorMessage || `'${file.name}' işlenirken bir hata oluştu.`);
+            }
+            return prevInvoices.map(inv => (inv.id === invoiceId ? finalResult : inv));
+        });
+    }
+
+    setTimeout(() => {
+        setUploadQueue(prevQueue => prevQueue.filter(id => id !== invoiceId));
+        setIsProcessingQueue(false);
+    }, 500);
+  };
+
+  useEffect(() => {
+    if (uploadQueue.length > 0 && !isProcessingQueue && isInitialized) {
+      const invoiceIdToProcess = uploadQueue[0];
+      
+      if (deletedInvoiceIds.current.has(invoiceIdToProcess)) {
+        // Skip processing if the invoice has been deleted.
+        setUploadQueue(prevQueue => prevQueue.filter(id => id !== invoiceIdToProcess));
+        return;
+      }
+      
+      setIsProcessingQueue(true);
+
+      const invoiceInfo = processedInvoices.find(inv => inv.id === invoiceIdToProcess);
+      const dataUrl = fileCache.get(invoiceIdToProcess);
+
+      if (dataUrl && invoiceInfo) {
+        const fileToProcess = dataUrlToFile(dataUrl, invoiceInfo.fileName, invoiceInfo.fileType);
+        processFile(invoiceIdToProcess, fileToProcess);
+      } else {
+        setProcessedInvoices(prevInvoices =>
+          prevInvoices.map(inv =>
+            inv.id === invoiceIdToProcess
+              ? { ...inv, status: FileProcessingStatus.ERROR, errorMessage: "Dosya verisi bulunamadı." }
               : inv
-        )
+          )
+        );
+        setUploadQueue(prevQueue => prevQueue.filter(id => id !== invoiceIdToProcess));
+        setIsProcessingQueue(false);
+      }
+    }
+  }, [uploadQueue, isProcessingQueue, fileCache, processedInvoices, isInitialized]);
+
+  const handleBulkExport = useCallback(() => {
+    clearAlerts();
+    const reviewedInvoices = processedInvoices.filter(inv => inv.reviewStatus === 'reviewed');
+    if (reviewedInvoices.length === 0) {
+      setGlobalError("Excel'e aktarılacak, kontrolü tamamlanmış fatura bulunmuyor.");
+      return;
+    }
+    try {
+      downloadInvoicesAsExcel(reviewedInvoices);
+      setGlobalSuccess(`${reviewedInvoices.length} adet fatura Excel'e aktarıldı. Liste temizleniyor.`);
+      
+      const reviewedInvoiceIds = new Set(reviewedInvoices.map(inv => inv.id));
+      
+      setProcessedInvoices(prev => prev.filter(inv => !reviewedInvoiceIds.has(inv.id)));
+      setFileCache(prev => {
+        const newCache = new Map(prev);
+        reviewedInvoiceIds.forEach(id => newCache.delete(id));
+        return newCache;
+      });
+
+    } catch (error) {
+      console.error("Toplu indirme hatası:", error);
+      const errorMessage = error instanceof Error ? error.message : 'Excel dosyası oluşturulamadı.';
+      setGlobalError(errorMessage);
+    }
+  }, [processedInvoices]);
+
+  const handleDeleteInvoice = (invoiceId: string) => {
+    // The problematic confirmation dialog has been removed to ensure deletion works consistently.
+    // The action is now immediate.
+    clearAlerts();
+    
+    // Add to a ref set to prevent race conditions with async processing.
+    // If a file is being processed, this ensures its result won't be added back to state.
+    deletedInvoiceIds.current.add(invoiceId); 
+    
+    // 1. Remove from the main invoices list
+    setProcessedInvoices(prev => prev.filter(inv => inv.id !== invoiceId));
+
+    // 2. Remove from the file cache
+    setFileCache(prev => {
+      const newCache = new Map(prev);
+      newCache.delete(invoiceId);
+      return newCache;
+    });
+
+    // 3. Remove from the processing queue if it's there
+    setUploadQueue(prev => prev.filter(id => id !== invoiceId));
+    
+    setGlobalSuccess("Fatura başarıyla silindi.");
+  };
+
+  const handleViewDetails = (invoiceId: string) => {
+    setCurrentInvoiceId(invoiceId);
+  };
+
+  const handleReturnToList = () => {
+    setCurrentInvoiceId(null);
+  };
+
+  const handleSaveCorrections = (invoiceId: string, updatedData: ExtractedInvoiceFields) => {
+    setProcessedInvoices(prev => prev.map(inv => 
+      inv.id === invoiceId ? { ...inv, extractedData: updatedData, reviewStatus: 'reviewed' as ReviewStatus, status: FileProcessingStatus.SUCCESS } : inv
+    ));
+    setGlobalSuccess("Düzeltmeler kaydedildi ve fatura onaylandı!");
+    setCurrentInvoiceId(null);
+  };
+  
+  const handleNavigate = (page: 'upload' | 'review') => {
+    setCurrentPage(page);
+    setCurrentInvoiceId(null);
+  };
+    
+  const reviewedCount = processedInvoices.filter(inv => inv.reviewStatus === 'reviewed').length;
+  const pendingReviewCount = processedInvoices.filter(inv => inv.reviewStatus === 'pending').length;
+  const pendingReviewInvoices = processedInvoices.filter(inv => inv.reviewStatus === 'pending');
+
+  const currentInvoiceForCheck = processedInvoices.find(inv => inv.id === currentInvoiceId);
+  const currentFileDataUrl = currentInvoiceId ? fileCache.get(currentInvoiceId) : undefined;
+  
+  const renderPage = () => {
+    if (currentInvoiceForCheck && currentFileDataUrl) {
+      const currentFileForCheck = dataUrlToFile(currentFileDataUrl, currentInvoiceForCheck.fileName, currentInvoiceForCheck.fileType);
+      return (
+        <CheckInvoicePage 
+          invoice={currentInvoiceForCheck}
+          file={currentFileForCheck}
+          onBack={handleReturnToList}
+          onSave={handleSaveCorrections}
+          isReadOnly={currentInvoiceForCheck.reviewStatus === 'reviewed'}
+        />
       );
     }
-    setPendingAction(null);
+    if (currentPage === 'review') {
+      return (
+        <ReviewPage 
+          invoices={pendingReviewInvoices}
+          onViewDetails={handleViewDetails}
+          onDeleteInvoice={handleDeleteInvoice}
+        />
+      );
+    }
+    return (
+      <UploadPage 
+        invoices={processedInvoices}
+        onFileSubmit={handleFileSubmit}
+        onViewDetails={handleViewDetails}
+        onDeleteInvoice={handleDeleteInvoice}
+      />
+    );
   };
 
-  const handleCancelAction = () => {
-    setPendingAction(null);
-  };
-
-  const unreviewedCount = invoices.filter(inv => inv.status === FileProcessingStatus.AWAITING_REVIEW && !inv.isReviewed).length;
-  const reviewedCount = invoices.filter(inv => inv.isReviewed).length;
-  
-  const renderContent = () => {
-      if (!isLoaded) {
-          return <div className="flex justify-center items-center h-64"><Spinner /></div>;
-      }
-      switch(view) {
-          case 'check':
-              return <CheckView invoices={invoices} onUpdateInvoices={updateAndSaveInvoices} />;
-          case 'reviewed':
-              return <ReviewedView invoices={invoices} onRequestDelete={handleRequestDelete} onRequestRevert={handleRequestRevert} />;
-          case 'main':
-          default:
-              return (
-                  <>
-                    <h2 className="text-3xl font-bold text-center mb-6 text-indigo-400">Fatura Yükleyin ve Verileri Çıkarın</h2>
-                    <FileUploadArea onSubmit={handleFileSubmit} />
-                    {invoices.length > 0 && (
-                      <div className="mt-12">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-2xl font-semibold text-indigo-300">İşlem Geçmişi</h3>
-                            <button 
-                                onClick={() => setDebugMode(!debugMode)}
-                                className="px-3 py-1 text-xs bg-slate-700 hover:bg-slate-600 rounded"
-                            >
-                                {debugMode ? 'Hide' : 'Show'} Debug
-                            </button>
-                        </div>
-                        {debugMode && (
-                            <div className="bg-black/50 p-4 rounded-lg mb-4 max-h-96 overflow-auto border border-slate-700">
-                                <h4 className="font-bold text-lg text-yellow-400 mb-2">Invoice State</h4>
-                                <pre className="text-xs text-slate-300">{JSON.stringify(invoices, null, 2)}</pre>
-                            </div>
-                        )}
-                        <div className="space-y-6">
-                          {invoices.map(invoice => (
-                            <ProcessedInvoiceCard key={invoice.id} invoice={invoice} />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {invoices.length === 0 && (
-                      <div className="mt-12 text-center text-slate-500">
-                        <p>Henüz işlenmiş fatura yok. Lütfen bir dosya yükleyin.</p>
-                        <img src="https://picsum.photos/seed/fatrocu/400/200" alt="Placeholder" className="mt-4 mx-auto rounded-lg shadow-lg opacity-30" />
-                      </div>
-                    )}
-                  </>
-              );
-      }
-  };
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-900">
+        <h2 className="text-2xl text-slate-300 font-semibold">Uygulama Yükleniyor...</h2>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-black to-indigo-950 text-slate-200">
-      <Header onNavigate={setView} reviewCount={unreviewedCount} reviewedCount={reviewedCount} isQueuePaused={isPausedForRateLimit} />
+    <div className="min-h-screen flex flex-col bg-slate-900 text-slate-100">
+      <Header 
+        onBulkExport={handleBulkExport} 
+        reviewedInvoicesCount={reviewedCount}
+        currentPage={currentPage}
+        onNavigate={handleNavigate}
+        pendingReviewCount={pendingReviewCount}
+      />
       <main className="flex-grow container mx-auto px-4 py-8">
-        {renderContent()}
+        {globalError && <AlertMessage type="error" message={globalError} onClose={clearAlerts} />}
+        {globalSuccess && <AlertMessage type="success" message={globalSuccess} onClose={clearAlerts} />}
+        {renderPage()}
       </main>
-      {pendingAction && (
-        <ConfirmationModal 
-          message={
-            pendingAction.action === 'delete' 
-              ? "Bu faturayı kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
-              : "Bu faturayı tekrar kontrol etmek için 'Kontrol & Dışa Aktar' listesine taşımak istediğinizden emin misiniz?"
-          }
-          confirmText={pendingAction.action === 'delete' ? 'Sil' : 'Evet, Geri Al'}
-          onConfirm={handleConfirmAction}
-          onCancel={handleCancelAction}
-        />
-      )}
+      <Footer />
     </div>
   );
 };
