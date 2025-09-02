@@ -1,5 +1,0 @@
-{
-  "name": "Fatrocu v2 - Akıllı Fatura İşleme",
-  "description": "Fatura (XML, PDF, Resim) yükleyip verileri çıkaran ve Excel'e aktaran bir web uygulaması.",
-  "requestFramePermissions": []
-}
