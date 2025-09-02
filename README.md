@@ -53,15 +53,15 @@ Fatrocu, modern web teknolojileri ve Google Gemini yapay zekasını kullanarak f
 ## Gelecek Planları (Roadmap)
 
 ### Sürüm 2.3.0
--   ** [ ] Gelişmiş Dışa Aktarma Seçenekleri:** CSV formatında dışa aktarma ve kullanıcıların sütunları özelleştirebileceği basit şablonlar.
--   ** [ ] Toplu Düzenleme:** Birden fazla faturanın ortak alanlarını (örneğin satıcı adı) tek seferde düzenleme imkanı.
--   ** [ ] Arama ve Filtreleme:** İşlem geçmişindeki faturalar arasında fatura numarası, tarih veya tutara göre arama ve filtreleme yapma.
+- [ ] Gelişmiş Dışa Aktarma Seçenekleri:** CSV formatında dışa aktarma ve kullanıcıların sütunları özelleştirebileceği basit şablonlar.
+- [ ] Toplu Düzenleme:** Birden fazla faturanın ortak alanlarını (örneğin satıcı adı) tek seferde düzenleme imkanı.
+- [ ] Arama ve Filtreleme:** İşlem geçmişindeki faturalar arasında fatura numarası, tarih veya tutara göre arama ve filtreleme yapma.
 
 ### Sürüm 2.4.0
--   ** [ ] İstatistik Paneli (Dashboard):** Aylık toplamlar, satıcılara göre harcama dağılımı gibi temel görsel istatistikler sunan bir panel.
--   ** [ ] Çoklu Dil Desteği:** Arayüz için İngilizce dil seçeneği eklenmesi.
--   ** [ ] Gelişmiş Hata Yönetimi:** Yapay zekanın veri çıkaramadığı durumlarda kullanıcıya daha açıklayıcı geri bildirimler sunma.
+- [ ] İstatistik Paneli (Dashboard):** Aylık toplamlar, satıcılara göre harcama dağılımı gibi temel görsel istatistikler sunan bir panel.
+- [ ] Çoklu Dil Desteği:** Arayüz için İngilizce dil seçeneği eklenmesi.
+- [ ] Gelişmiş Hata Yönetimi:** Yapay zekanın veri çıkaramadığı durumlarda kullanıcıya daha açıklayıcı geri bildirimler sunma.
 
 ### Sürüm 3.0.0
--   ** [ ] Bulut Senkronizasyonu:** Kullanıcıların verilerini isteğe bağlı olarak bir bulut hesabıyla (örn. Nextcloud, Google Drive, Dropbox) senkronize ederek farklı cihazlardan erişim sağlaması.
--   ** [ ] E-posta Entegrasyonu:** Belirlenen bir e-posta adresine gelen fatura eklerini otomatik olarak işleme yeteneği.
+- [ ] Bulut Senkronizasyonu:** Kullanıcıların verilerini isteğe bağlı olarak bir bulut hesabıyla (örn. Nextcloud, Google Drive, Dropbox) senkronize ederek farklı cihazlardan erişim sağlaması.
+- [ ] E-posta Entegrasyonu:** Belirlenen bir e-posta adresine gelen fatura eklerini otomatik olarak işleme yeteneği.
