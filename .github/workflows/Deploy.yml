@@ -1,4 +1,4 @@
-name: Build Vite App for GitHub Pages
+name: Deploy Vite App to GitHub Pages
 
 on:
   push:
@@ -7,12 +7,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -30,3 +32,10 @@ jobs:
 
       - name: Verify dist folder
         run: ls -la ./dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
