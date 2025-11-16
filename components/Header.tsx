@@ -1,10 +1,11 @@
+
 import React from 'react';
 
 interface HeaderProps {
     onBulkExport: () => void;
     reviewedInvoicesCount: number;
-    currentPage: 'upload' | 'review';
-    onNavigate: (page: 'upload' | 'review') => void;
+    currentPage: 'upload' | 'review' | 'settings' | 'approved';
+    onNavigate: (page: 'upload' | 'review' | 'settings' | 'approved') => void;
     pendingReviewCount: number;
 }
 
@@ -68,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({ onBulkExport, reviewedInvoicesCo
                     strokeLinejoin="round"
                 />
             </svg>
-            Fatrocu v2
+            Fatrocu v2.1
             </h1>
         </div>
 
@@ -84,6 +85,15 @@ export const Header: React.FC<HeaderProps> = ({ onBulkExport, reviewedInvoicesCo
                         <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500 text-white text-xs items-center justify-center">{pendingReviewCount}</span>
                     </span>
                 )}
+            </NavButton>
+            <NavButton onClick={() => onNavigate('approved')} isActive={currentPage === 'approved'}>
+                Onaylananlar
+                 {reviewedInvoicesCount > 0 && (
+                    <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center text-xs text-white bg-green-500 rounded-full">{reviewedInvoicesCount}</span>
+                )}
+            </NavButton>
+            <NavButton onClick={() => onNavigate('settings')} isActive={currentPage === 'settings'}>
+                Ayarlar
             </NavButton>
         </nav>
 

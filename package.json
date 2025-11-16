@@ -9,18 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "latest",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "@google/genai": "latest",
     "xlsx": "latest"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.2",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.12",
+    "@vitejs/plugin-react": "^5.0.0",
     "typescript": "~5.8.2",
-    "vite": "^6.3.6"
+    "vite": "^6.2.0"
   }
 }

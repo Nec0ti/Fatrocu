@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { ProcessedInvoice, FileProcessingStatus } from '../types';
+import { ProcessedInvoice, FileProcessingStatus, InvoiceConfig, FieldConfig } from '../types';
 import { ProgressBar } from './ProgressBar';
 
 interface ProcessedInvoiceCardProps {
   invoice: ProcessedInvoice;
+  config: InvoiceConfig | undefined;
   onViewDetails: (invoiceId: string) => void;
   onDelete: (invoiceId: string) => void;
 }
@@ -18,7 +19,7 @@ const DataRow: React.FC<{ label: string; value?: string }> = ({ label, value }) 
   </div>
 );
 
-export const ProcessedInvoiceCard: React.FC<ProcessedInvoiceCardProps> = ({ invoice, onViewDetails, onDelete }) => {
+export const ProcessedInvoiceCard: React.FC<ProcessedInvoiceCardProps> = ({ invoice, config, onViewDetails, onDelete }) => {
   const getStatusColor = () => {
      if (invoice.reviewStatus === 'reviewed') return 'border-green-500';
      if (invoice.status === FileProcessingStatus.SUCCESS) return 'border-yellow-500';
@@ -56,21 +57,27 @@ export const ProcessedInvoiceCard: React.FC<ProcessedInvoiceCardProps> = ({ invo
       );
     }
 
-    if (invoice.status === FileProcessingStatus.SUCCESS && invoice.extractedData) {
+    if (invoice.status === FileProcessingStatus.SUCCESS && invoice.extractedData && config) {
       const data = invoice.extractedData;
+      const combinedFields: FieldConfig[] = [...(config.fields || []), ...(invoice.customFields || [])];
+      const fieldsToDisplay = combinedFields.slice(0, 4);
+
+      if(fieldsToDisplay.length === 0) {
+        return <p className="text-slate-400 py-4 text-center italic">Bu belge için henüz bir alan tanımlanmadı. Kontrol ekranından ekleyebilirsiniz.</p>;
+      }
+
       return (
         <dl className="divide-y divide-slate-700">
-          <DataRow label="Fatura Numarası" value={data.faturaNumarasi?.value} />
-          <DataRow label="Fatura Tarihi" value={data.faturaTarihi?.value} />
-          <DataRow label="Satıcı Ünvan" value={data.saticiUnvan?.value} />
-          <DataRow label="Genel Toplam" value={data.genelToplam?.value} />
+          {fieldsToDisplay.map(field => (
+             <DataRow key={field.key} label={field.label} value={data[field.key]?.value} />
+          ))}
         </dl>
       );
     }
-    return <p className="text-slate-400 py-4 text-center">İşlem tamamlandı, ancak gösterilecek veri yok.</p>;
+    return <p className="text-slate-400 py-4 text-center">İşlem tamamlandı, ancak gösterilecek veri yok veya yapılandırma bulunamadı.</p>;
   };
   
-  const isClickable = invoice.status === FileProcessingStatus.SUCCESS;
+  const isClickable = invoice.status === FileProcessingStatus.SUCCESS || invoice.reviewStatus === 'reviewed';
 
   return (
     <div className={`bg-slate-800/80 shadow-xl rounded-lg overflow-hidden border-l-4 ${getStatusColor()} transition-all duration-300`}>
@@ -80,7 +87,7 @@ export const ProcessedInvoiceCard: React.FC<ProcessedInvoiceCardProps> = ({ invo
       >
         <div className="flex-grow">
           <h3 className="text-lg leading-6 font-medium text-indigo-300 break-all">{invoice.fileName}</h3>
-          <p className="mt-1 max-w-2xl text-xs text-slate-400">{invoice.fileType} - {getStatusText()}</p>
+          <p className="mt-1 max-w-2xl text-xs text-slate-400">{config?.name || 'Bilinmeyen Tip'} - {getStatusText()}</p>
         </div>
         <div className="flex items-center space-x-2">
             {invoice.reviewStatus === 'reviewed' && (

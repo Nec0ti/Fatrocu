@@ -1,14 +1,18 @@
+
 import React from 'react';
 import { ProcessedInvoiceCard } from '../components/ProcessedInvoiceCard';
-import { ProcessedInvoice } from '../types';
+import { ProcessedInvoice, InvoiceConfig } from '../types';
 
 interface ReviewPageProps {
     invoices: ProcessedInvoice[];
+    configs: InvoiceConfig[];
     onViewDetails: (invoiceId: string) => void;
     onDeleteInvoice: (invoiceId: string) => void;
 }
 
-export const ReviewPage: React.FC<ReviewPageProps> = ({ invoices, onViewDetails, onDeleteInvoice }) => {
+export const ReviewPage: React.FC<ReviewPageProps> = ({ invoices, configs, onViewDetails, onDeleteInvoice }) => {
+    const configMap = new Map(configs.map(c => [c.id, c]));
+    
     return (
         <div>
             <h2 className="text-3xl font-bold text-center mb-8 text-yellow-400">Kontrol Bekleyen Faturalar</h2>
@@ -18,6 +22,7 @@ export const ReviewPage: React.FC<ReviewPageProps> = ({ invoices, onViewDetails,
                         <ProcessedInvoiceCard 
                             key={invoice.id} 
                             invoice={invoice}
+                            config={configMap.get(invoice.configId)}
                             onViewDetails={onViewDetails}
                             onDelete={onDeleteInvoice}
                         />
