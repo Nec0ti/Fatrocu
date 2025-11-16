@@ -1,7 +1,7 @@
 {
   "name": "fatrocu-v2---akıllı-fatura-i̇şleme",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,9 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/gemini-cli": "^0.15.3",
+    "@google/genai": "latest",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "@google/genai": "latest",
     "xlsx": "latest"
   },
   "devDependencies": {
