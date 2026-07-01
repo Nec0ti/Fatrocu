@@ -69,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({ onBulkExport, reviewedInvoicesCo
                     strokeLinejoin="round"
                 />
             </svg>
-            Fatrocu v2.1
+            Fatrocu v2.2
             </h1>
         </div>
 

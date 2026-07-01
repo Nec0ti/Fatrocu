@@ -1,6 +1,6 @@
-# Fatrocu v2.1 - Akıllı ve Özelleştirilebilir Fatura İşleme
+# Fatrocu v2.2 - Akıllı ve Özelleştirilebilir Fatura İşleme
 
-**Sürüm:** 2.1.0
+**Sürüm:** 2.2.0
 
 Fatrocu, modern web teknolojileri ve Google Gemini yapay zekasını kullanarak fatura (PDF, Resim, XML) işleme sürecini otomatikleştiren, **tamamen özelleştirilebilir**, tarayıcı tabanlı bir uygulamadır. Kullanıcıların faturalarını kolayca yükleyip, verilerini anında çıkarmasını, kontrol edip düzeltmesini ve son olarak toplu halde Excel'e aktarmasını sağlar.
 
