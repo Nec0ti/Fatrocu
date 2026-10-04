@@ -43,3 +43,4 @@ $RECYCLE.BIN/
 # User AppData / Cache / Temp
 *.tmp
 *.temp
+DOCS_SUMMARY.md
