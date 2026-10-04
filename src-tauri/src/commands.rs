@@ -7,7 +7,8 @@ use crate::models::{
 use crate::pdf_converter::DocumentProcessor;
 use crate::storage::StorageManager;
 use log::{error, info};
-use std::path::PathBuf;
+use std::env;
+use std::process::Command;
 use std::sync::Mutex;
 use tauri::State;
 
@@ -150,7 +151,50 @@ pub async fn process_invoice_from_bytes(
         });
     }
 
-    // STEP 1+2 (UNIFIED): Moondream 3.1-9B-A2B — Tek model, tek çağrı
+    // If a FATROCU_SERVER_URL is set, delegate processing to the server instead of local llama engine.
+    if let Ok(server_url) = env::var("FATROCU_SERVER_URL") {
+        // Build multipart POST using curl (available via MSYS on Windows)
+        let mut curl_cmd = Command::new("curl");
+        curl_cmd.args(&[
+            "-X", "POST",
+            "-F", &format!("image=@{}", saved_path_str),
+            "-F", "model=ImajeV-2B-Q8_0",
+            "-F", "temp=0.2",
+            "-F", "n_predict=8",
+            "-F", "ctx_size=256",
+            &format!("{}/process", server_url),
+        ]);
+        let output = curl_cmd.output().map_err(|e| format!("failed to call fatrocu-server: {}", e))?;
+        if !output.status.success() {
+            let err = String::from_utf8_lossy(&output.stderr);
+            return Err(format!("Server call failed: {}", err));
+        }
+        let raw = String::from_utf8_lossy(&output.stdout);
+        // Parse JSON response using existing parser
+        let (extracted_data, line_items, raw_markdown) = LlamaEngine::parse_unified_response(&raw)?;
+        // Return processed invoice
+        return Ok(ProcessedInvoice {
+            id: temp_id,
+            file_name,
+            file_type,
+            file_path: Some(saved_path_str),
+            preview_image_base64: Some(data_url),
+            status: FileProcessingStatus::Success,
+            review_status: Some(ReviewStatus::Pending),
+            extracted_data: Some(extracted_data),
+            line_items: Some(line_items),
+            error_message: None,
+            config_id: config.id,
+            custom_fields: None,
+            custom_line_item_fields: None,
+            raw_ocr: Some(raw_markdown.clone()),
+            raw_markdown: Some(raw_markdown),
+            ocr_model: Some("ImajeV-2B-Q8_0".to_string()),
+            model_used: Some("ImajeV-2B-Q8_0".to_string()),
+            created_at: Some(chrono::Local::now().to_rfc3339()),
+        });
+    }
+
     // Eski DeepSeek-OCR + Gemma 4 pipeline'i tek bir model çağrısına dönüştürüldü.
     match LlamaEngine::run_pipeline(&raw_image_bytes, &config, &settings) {
         Ok((extracted_data, line_items, raw_markdown)) => {
