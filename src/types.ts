@@ -64,7 +64,8 @@ export interface ProcessedInvoice {
 }
 
 // ─── Model Management (Faz 2 ready) ─────────────────────────────────────────
-export type GemmaVariant = 'E2B' | 'E4B' | '12B' | 'custom';
+export type ModelVariant = 'E2B' | 'E4B' | '12B' | 'custom'; // Legacy / compatibility only
+export type ModelName = 'Moondream 3.1-9B-A2B'; // v3.1 default
 
 export interface ManagedModel {
   id: GemmaVariant | string;
@@ -79,19 +80,25 @@ export interface ManagedModel {
 
 // ─── App Settings ─────────────────────────────────────────────────────────────
 export interface AppSettings {
-  // OCR engine (DeepSeek-OCR via llama.cpp)
+  // v3.1: Moondream 3.1-9B-A2B (single unified model)
+  modelPath: string;
+  modelThreads: number;
+  modelGpuLayers: number;
+
+  // v3.0 compatibility (kept for migration)
   ocrModelPath: string;
   ocrThreads: number;
-  ocrGpuLayers: number;          // 0 = CPU-only, >0 = offload layers to GPU
-
-  // Extraction assistant (Gemma 4 via llama.cpp)
-  extractionModelId: GemmaVariant | string;
+  ocrGpuLayers: number;
+  extractionModelId: ModelVariant;
   extractionModelPath: string;
   extractionThreads: number;
   extractionGpuLayers: number;
 
   // Legacy / compatibility (kept for Faz 2 migration)
   navidcUrl?: string;
+  // v3.0 compatibility
+  ocrModelId?: ModelVariant;
+  extractionModelId?: ModelVariant;
 
   // General
   saveProcessedFiles: boolean;

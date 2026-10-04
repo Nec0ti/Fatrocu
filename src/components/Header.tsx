@@ -2,6 +2,13 @@ import React from 'react';
 import { FileText, Clock, CheckSquare, Settings, Upload, Sparkles, PenTool } from 'lucide-react';
 import { ModelStatus } from '../types';
 
+// v3.1: Model name mapping for display
+const MODEL_NAMES: Record<string, string> = {
+  'Moondream 3.1-9B-A2B': 'Moondream 3.1-9B-A2B',
+  'Qwen/Qwen2.5-VL-7B-Instruct': 'Moondream 3.1-9B-A2B',
+  'Moondream': 'Moondream 3.1-9B-A2B',
+};
+
 type Page = 'upload' | 'review' | 'approved' | 'settings';
 
 interface HeaderProps {
@@ -96,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
               Pipeline
             </span>
             <span className="text-xs font-bold text-black block leading-tight font-heading">
-              {modelStatus?.modelName ?? 'DeepSeek + Gemma'}
+              {MODEL_NAMES[modelStatus?.modelName] ?? modelStatus?.modelName ?? 'Moondream 3.1-9B-A2B'}
             </span>
           </div>
         </div>

@@ -16,13 +16,9 @@ import { PREDEFINED_CONFIGS } from './services/configService';
 type Page = 'upload' | 'review' | 'approved' | 'settings' | 'check';
 
 const DEFAULT_SETTINGS: AppSettings = {
-  ocrModelPath: '',
-  ocrThreads: 4,
-  ocrGpuLayers: 0,
-  extractionModelId: 'E4B' as GemmaVariant,
-  extractionModelPath: '',
-  extractionThreads: 4,
-  extractionGpuLayers: 0,
+  modelPath: '',
+  threads: 4,
+  gpuLayers: 0,
   saveProcessedFiles: true,
   defaultExportFormat: 'xlsx',
 };
@@ -34,6 +30,13 @@ export const App: React.FC = () => {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [modelStatus, setModelStatus] = useState<ModelStatus | null>(null);
 
+  // Model name display for status bar
+  const getModelName = (status: ModelStatus | null) => {
+    if (!status) return '—';
+    if (status.modelName.includes('Moondream')) return 'Moondream 3.1-9B-A2B';
+    if (status.modelName.includes('Gemma')) return `Gemma 4 (${status.modelName.split(' ')[1]})`;
+    return status.modelName;
+  };
   const [page, setPage] = useState<Page>('upload');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -174,6 +177,7 @@ export const App: React.FC = () => {
         pendingCount={pending.length}
         approvedCount={approved.length}
         modelStatus={modelStatus}
+        modelName={getModelName(modelStatus)}
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex flex-col gap-6">

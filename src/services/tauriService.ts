@@ -19,6 +19,13 @@ import { PREDEFINED_CONFIGS } from './configService';
 const IS_TAURI = typeof (window as any).__TAURI_INTERNALS__ !== 'undefined';
 
 const DEFAULT_SETTINGS: AppSettings = {
+  // v3.1: Moondream 3.1-9B-A2B (single unified model)
+  modelPath: '',
+  modelThreads: 4,
+  modelGpuLayers: 0,
+  saveProcessedFiles: true,
+  defaultExportFormat: 'xlsx',
+  // v3.0 compatibility fields (kept for migration)
   ocrModelPath: '',
   ocrThreads: 4,
   ocrGpuLayers: 0,
@@ -26,8 +33,6 @@ const DEFAULT_SETTINGS: AppSettings = {
   extractionModelPath: '',
   extractionThreads: 4,
   extractionGpuLayers: 0,
-  saveProcessedFiles: true,
-  defaultExportFormat: 'xlsx',
 };
 
 // ─── Helper — File → Base64 bytes array ───────────────────────────────────────
@@ -113,7 +118,7 @@ class TauriService {
     } catch (e) {
       return {
         online: false,
-        modelName: 'Motor durumu alınamadı',
+        modelName: 'Moondream 3.1-9B-A2B',
         modelLoaded: false,
         device: '—',
         message: String(e),

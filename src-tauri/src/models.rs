@@ -74,51 +74,48 @@ pub struct ProcessedInvoice {
     pub config_id: String,
     pub custom_fields: Option<Vec<FieldConfig>>,
     pub custom_line_item_fields: Option<Vec<FieldConfig>>,
-    pub raw_ocr: Option<String>,      // DeepSeek-OCR markdown çıktısı
-    pub raw_markdown: Option<String>, // alias (backward compat)
-    pub ocr_model: Option<String>,    // hangi OCR modeli kullanıldı
-    pub model_used: Option<String>,   // Gemma extraction modeli
+    pub raw_ocr: Option<String>,
+    pub raw_markdown: Option<String>,
+    /// Which model was used for extraction
+    pub model_used: Option<String>,
     pub created_at: Option<String>,
 }
 
-// ─── App Settings — Yeni Pipeline Şeması ─────────────────────────────────────
+// ─── App Settings — v3.1: Single Moondream Model ─────────────────────────────
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AppSettings {
-    // DeepSeek-OCR (GGUF) — llama.cpp ile çalışır
-    pub ocr_model_path: String,
-    pub ocr_threads: u32,
-    pub ocr_gpu_layers: u32,
+    /// Moondream 3.1-9B-A2B model path (GGUF format)
+    /// Supports: Qwen/Qwen2.5-VL-7B-Instruct (Moondream 3.1-9B-A2B)
+    pub model_path: String,
 
-    // Gemma 4 (GGUF) — alan çıkarma asistanı
-    pub extraction_model_id: String,   // "E2B" | "E4B" | "12B" | "custom"
-    pub extraction_model_path: String,
-    pub extraction_threads: u32,
-    pub extraction_gpu_layers: u32,
+    /// Number of threads for inference
+    pub threads: u32,
 
-    // Genel
+    /// Number of GPU layers to offload (0 = CPU only)
+    pub gpu_layers: u32,
+
+    /// Whether to save processed image files
     pub save_processed_files: bool,
+
+    /// Default export format
     pub default_export_format: String, // "xlsx" | "csv"
 }
 
 impl Default for AppSettings {
     fn default() -> Self {
         Self {
-            ocr_model_path: String::new(),
-            ocr_threads: 4,
-            ocr_gpu_layers: 0,
-            extraction_model_id: "E4B".to_string(),
-            extraction_model_path: String::new(),
-            extraction_threads: 4,
-            extraction_gpu_layers: 0,
+            model_path: String::new(),
+            threads: 4,
+            gpu_layers: 0,
             save_processed_files: true,
             default_export_format: "xlsx".to_string(),
         }
     }
 }
 
-// ─── Engine/Model Status ──────────────────────────────────────────────────────
+// ─── Engine / Model Status ────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

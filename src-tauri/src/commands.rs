@@ -1,7 +1,8 @@
 use crate::excel_export::ExcelExporter;
-use crate::llama_engine::LlamaEngine;
+use crate::llama_engine::{LlamaEngine, AppSettings};
 use crate::models::{
-    AppSettings, FileProcessingStatus, InvoiceConfig, ModelStatus, ProcessedInvoice, ReviewStatus,
+    AppSettings as BackendAppSettings, FileProcessingStatus, InvoiceConfig, ModelStatus,
+    ProcessedInvoice, ReviewStatus,
 };
 use crate::pdf_converter::DocumentProcessor;
 use crate::storage::StorageManager;
@@ -110,7 +111,7 @@ pub async fn process_invoice_from_bytes(
     info!("İşleme başlandı: {} ({})", file_name, config.name);
 
     // STEP 0: PDF → PNG veya görsel normalize
-    let (raw_image_bytes, _image_b64, data_url) =
+    let (raw_image_bytes, image_b64, data_url) =
         DocumentProcessor::process_bytes_to_image(&file_bytes, &file_name)?;
 
     let settings = {
@@ -149,10 +150,11 @@ pub async fn process_invoice_from_bytes(
         });
     }
 
-    // STEP 1+2: DeepSeek-OCR + Gemma 4 Pipeline
-    match LlamaEngine::run_full_pipeline(&raw_image_bytes, &config, &settings) {
-        Ok((extracted_data, line_items, raw_markdown, model_used)) => {
-            info!("Pipeline başarılı: {}", file_name);
+    // STEP 1+2 (UNIFIED): Moondream 3.1-9B-A2B — Tek model, tek çağrı
+    // Eski DeepSeek-OCR + Gemma 4 pipeline'i tek bir model çağrısına dönüştürüldü.
+    match LlamaEngine::run_pipeline(&raw_image_bytes, &config, &settings) {
+        Ok((extracted_data, line_items, raw_markdown)) => {
+            info!("Moondream pipeline başarılı: {}", file_name);
             Ok(ProcessedInvoice {
                 id: temp_id,
                 file_name,
@@ -169,13 +171,13 @@ pub async fn process_invoice_from_bytes(
                 custom_line_item_fields: None,
                 raw_ocr: Some(raw_markdown.clone()),
                 raw_markdown: Some(raw_markdown),
-                ocr_model: Some("DeepSeek-OCR-GGUF".to_string()),
-                model_used: Some(model_used),
+                ocr_model: Some("Moondream 3.1-9B-A2B".to_string()),
+                model_used: Some("Moondream 3.1-9B-A2B".to_string()),
                 created_at: Some(chrono::Local::now().to_rfc3339()),
             })
         }
         Err(err) => {
-            error!("Pipeline hatası [{}]: {}", file_name, err);
+            error!("Moondream pipeline hatası [{}]: {}", file_name, err);
             Ok(ProcessedInvoice {
                 id: temp_id,
                 file_name,
@@ -192,8 +194,8 @@ pub async fn process_invoice_from_bytes(
                 custom_line_item_fields: None,
                 raw_ocr: None,
                 raw_markdown: None,
-                ocr_model: None,
-                model_used: None,
+                ocr_model: Some("Moondream 3.1-9B-A2B".to_string()),
+                model_used: Some("Moondream 3.1-9B-A2B".to_string()),
                 created_at: Some(chrono::Local::now().to_rfc3339()),
             })
         }
@@ -282,7 +284,11 @@ pub async fn open_models_folder() -> Result<(), String> {
     open::that(&dir).map_err(|e| e.to_string())
 }
 
-/// Sürükleyip bırakılan veya dosya seçiciyle seçilen bir modeli otomatik algılayıp modeller klasörüne kopyalar ve ayarları günceller
+/// Sürükleyip bırakılan veya dosya seçiciyle seçilen bir modeli otomatik algılayıp
+/// modeller klasörüne kopyalar ve ayarları günceller.
+///
+/// v3.1: Artık sadece Moondream 3.1-9B-A2B modelini destekler.
+/// Diğer model formatları da desteklenebilir (e2b, e4b, 12b vb.)
 #[tauri::command]
 pub async fn import_model_file(
     source_path: String,
@@ -298,7 +304,6 @@ pub async fn import_model_file(
         .and_then(|n| n.to_str())
         .ok_or_else(|| "Geçersiz dosya adı".to_string())?;
 
-    let lower_name = file_name.to_lowercase();
     let models_dir = dirs::data_dir()
         .unwrap_or_else(|| PathBuf::from("."))
         .join("Fatrocu")
@@ -319,22 +324,22 @@ pub async fn import_model_file(
     let storage = state.storage.lock().map_err(|e| e.to_string())?;
     let mut settings = storage.load_settings();
 
-    let recognized_type = if lower_name.contains("deepseek") || lower_name.contains("ocr") {
-        settings.ocr_model_path = dest_str.clone();
-        "DeepSeek-OCR Modeli olarak algılandı ve ayarlandı."
-    } else if lower_name.contains("gemma") {
-        if lower_name.contains("e2b") || lower_name.contains("2b") {
-            settings.extraction_model_id = "E2B".to_string();
-        } else if lower_name.contains("12b") {
-            settings.extraction_model_id = "12B".to_string();
-        } else {
-            settings.extraction_model_id = "E4B".to_string();
-        }
-        settings.extraction_model_path = dest_str.clone();
-        "Gemma 4 Alan Çıkarma Modeli olarak algılandı ve ayarlandı."
+    let recognized_type = if file_name.to_lowercase().contains("qwen")
+        || file_name.to_lowercase().contains("moondream")
+    {
+        settings.model_path = dest_str.clone();
+        "Moondream 3.1-9B-A2B Modeli olarak algılandı ve ayarlandı."
+    } else if file_name.to_lowercase().contains("e2b") || file_name.to_lowercase().contains("2b") {
+        settings.model_path = dest_str.clone();
+        "Gemma 4 E2B Modeli olarak algılandı ve ayarlandı."
+    } else if file_name.to_lowercase().contains("e4b") || file_name.to_lowercase().contains("4b") {
+        settings.model_path = dest_str.clone();
+        "Gemma 4 E4B Modeli olarak algılandı ve ayarlandı."
+    } else if file_name.to_lowercase().contains("12b") {
+        settings.model_path = dest_str.clone();
+        "Gemma 4 12B Modeli olarak algılandı ve ayarlandı."
     } else {
-        settings.extraction_model_id = "custom".to_string();
-        settings.extraction_model_path = dest_str.clone();
+        settings.model_path = dest_str.clone();
         "Özel GGUF Modeli olarak algılandı ve ayarlandı."
     };
 
@@ -342,7 +347,7 @@ pub async fn import_model_file(
     Ok(format!("{}: {}", recognized_type, file_name))
 }
 
-/// llama-cli motorunu GitHub release'inden tek tıkla otomatik indirip kurar
+/// llama-cli motorunu GitHub release'inden tek tıkla otomatik indirip kurar.
 #[tauri::command]
 pub async fn auto_install_llama_engine() -> Result<String, String> {
     info!("Otomatik llama.cpp motor indirme başlatılıyor...");
@@ -353,7 +358,7 @@ pub async fn auto_install_llama_engine() -> Result<String, String> {
         .join("bin");
     std::fs::create_dir_all(&bin_dir).map_err(|e| e.to_string())?;
 
-    // GitHub llama.cpp en güncel kararlı release linkleri (önce b11063, ardından b11062 fallback)
+    // GitHub llama.cpp en güncel kararlı release linkleri
     let candidate_urls = [
         "https://github.com/ggerganov/llama.cpp/releases/download/b11063/llama-b11063-bin-win-cpu-x64.zip",
         "https://github.com/ggerganov/llama.cpp/releases/download/b11062/llama-b11062-bin-win-cpu-x64.zip",
@@ -361,7 +366,7 @@ pub async fn auto_install_llama_engine() -> Result<String, String> {
     ];
 
     let client = reqwest::Client::builder()
-        .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) Fatrocu/3.0")
+        .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) Fatrocu/3.1")
         .timeout(std::time::Duration::from_secs(180))
         .build()
         .map_err(|e| e.to_string())?;
