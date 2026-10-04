@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "Fatrocu - Akıllı Fatura İşleme (NaviDC-OCR)",
+        "title": "Fatrocu - Smart Invoice Processing (NaviDC-OCR)",
         "width": 1360,
         "height": 860,
         "minWidth": 1000,
