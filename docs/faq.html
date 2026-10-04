@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fatrocu CLI — Sık Sorulan Sorular">
+    <title>Sık Sorulan Sorular — Fatrocu CLI v3.1</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='%2300ff88'%3E✦%3C/text%3E%3C/svg%3E">
+    <style>
+        .faq-container { max-width: 900px; margin: 0 auto; }
+        .faq-section { margin-bottom: 60px; }
+        .faq-section h2 { font-size: 1.5rem; margin-bottom: 24px; color: var(--text-primary); }
+        .faq-section h2 .subtitle { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; font-size: 0.8rem; margin-left: 8px; }
+        .faq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+        .faq-card { background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 24px; cursor: pointer; transition: all var(--transition-base); position: relative; overflow: hidden; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        .faq-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .faq-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent-gradient); opacity: 0; transition: opacity var(--transition-base); }
+        .faq-card:hover::before { opacity: 1; }
+        .faq-card h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+        .faq-card .answer { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+        .faq-card .answer code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-secondary); }
+        .faq-card .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .badge-new { background: rgba(0, 255, 136, 0.15); color: var(--accent-primary); border: 1px solid rgba(0, 255, 136, 0.3); }
+        .badge-pro { background: rgba(0, 212, 255, 0.15); color: var(--accent-secondary); border: 1px solid rgba(0, 212, 255, 0.3); }
+        .badge-hot { background: rgba(255, 0, 128, 0.15); color: var(--accent-tertiary); border: 1px solid rgba(255, 0, 128, 0.3); }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="bg-gradient"></div>
+        <div class="bg-grid"></div>
+        <div class="particles" aria-hidden="true"></div>
+
+        <header class="hero">
+            <div class="hero-content">
+                <div class="logo-container">
+                    <div class="logo-glow">
+                        <svg width="64" height="64" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="48" fill="url(#grad1)" opacity="0.15"/>
+                            <circle cx="50" cy="50" r="45" fill="url(#grad2)" opacity="0.3"/>
+                            <path d="M30 50 L45 50 L42 62 L33 48 L20 56 L30 50 Z" fill="url(#grad3)"/>
+                            <defs>
+                                <linearGradient id="grad1" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#00ff88"/>
+                                    <stop offset="100%" stop-color="#00d4ff"/>
+                                </linearGradient>
+                                <linearGradient id="grad2" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#00d4ff"/>
+                                    <stop offset="100%" stop-color="#ff0080"/>
+                                </linearGradient>
+                                <linearGradient id="grad3" x1="30" y1="48" x2="45" y2="62" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#00ff88"/>
+                                    <stop offset="100%" stop-color="#00d4ff"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Fatrocu CLI</h1>
+                        <p class="tagline">v3.1.0</p>
+                    </div>
+                </div>
+                <p class="hero-description">Sık Sorulan Sorular</p>
+            </div>
+        </header>
+
+        <section class="section faq" style="padding: 80px 24px;">
+            <div class="section-container faq-container">
+                <div class="faq-section">
+                    <h2><span class="title-glow">Genel</span><span class="subtitle">General</span></h2>
+                    <div class="faq-grid">
+                        <article class="faq-card">
+                            <h4>🎯 Fatrocu CLI ne işe yarar?</h4>
+                            <p class="answer">Fatrocu CLI, ImajeV-2B-Q8_0 modelini kullanarak faturaları otomatik olarak işleyen, OCR ve alan çıkarma yapan komut satırı aracıdır. PDF veya görsel faturaları tarar, tüm alanları çıkarır ve Excel/CSV olarak dışa aktarır.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>🤖 Hangi model kullanılıyor?</h4>
+                            <p class="answer">Varsayılan olarak <strong>ImajeV-2B-Q8_0</strong> kullanılır (2 milyar parametre, Q8_0 kuantize). Ayrıca Gemma-4-E4B-it ve Gemma-4-E2B-it modelleri de desteklenir. Modeli <code>fatrocu models --download</code> ile indirebilirsiniz.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>⚙️ Hangi işletim sistemleri destekleniyor?</h4>
+                            <p class="answer">Windows 10/11 x64, Linux (Ubuntu, Debian, Fedora, Arch vb.), macOS. GPU desteği NVIDIA CUDA (CUDA 12+), AMD ROCm ile çalışır.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>📦 Minimum sistem gereksinimleri nedir?</h4>
+                            <p class="answer"><strong>RAM:</strong> 8 GB (8GB+ önerilir)<br><strong>GPU:</strong> 6 GB VRAM (opsiyonel, CPU ile de çalışır)<br><strong>Diske yer:</strong> ~7 GB (ImajeV-2B-Q8_0 için)</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="faq-section">
+                    <h2><span class="title-glow">Kurulum & Kullanım</span><span class="subtitle">Installation & Usage</span></h2>
+                    <div class="faq-grid">
+                        <article class="faq-card">
+                            <h4>📥 Model nasıl indirilir?</h4>
+                            <p class="answer"><code>fatrocu models --download ImajeV-2B-Q8_0</code> komutu ile indirilir. Model otomatik olarak <code>%APPDATA%\Fatrocu\models\</code> dizinine kaydedilir. İndirme ilerleme çubuğu ile takip edilir.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>🔧 llm-cli nedir ve neden gerekli?</h4>
+                            <p class="answer"><code>llama-cli</code> (llama.cpp'ın komut satırı aracı), GGUF modellerini çalıştırmak için kullanılır. Modeli indirdikten sonra, <code>llama-cli.exe</code> dosyasını sistem PATH'inize eklemeniz gerekir. Örnek: <code>PATH=C:\Users\{USER}\AppData\Roaming\Fatrocu\bin;%PATH%</code></p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>💻 pip bağımlılıkları nasıl kurulur?</h4>
+                            <p class="answer"><pre><code>pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+pip install excelize python-dateutil python-dotenv</code></pre></p>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="faq-section">
+                    <h2><span class="title-glow">Performans & Optimizasyon</span><span class="subtitle">Performance & Optimization</span></h2>
+                    <div class="faq-grid">
+                        <article class="faq-card">
+                            <h4>⚡ CPU vs GPU performans farkı nedir?</h4>
+                            <p class="answer"><strong>Intel i7-13700K (CPU):</strong> ~55 token/s<br><strong>NVIDIA RTX 4090 (GPU):</strong> ~280 token/s<br><strong>NVIDIA RTX 4060:</strong> ~160 token/s<br><strong>Intel Arc A770:</strong> ~140 token/s<br><br><em>Not: GPU katmanlarını ayarlamak için <code>--gpu-layers N</code> kullanın. 24GB VRAM için önerilen: <code>--gpu-layers 45</code></em></p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>🔄 Thread sayısı nasıl ayarlanır?</h4>
+                            <p class="answer"><code>--threads N</code> ile ayarlanır. Çoklu çekirdekli CPU'lar için önerilen: <code>--threads 8</code> (i7-13700K gibi 16 çekirdekli CPU'larda). Daha düşük çekirdekli sistemlerde (i5-1235U gibi) <code>--threads 2</code> daha iyi sonuç verebilir.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>🌡️ Temperature parametresi ne işe yarar?</h4>
+                            <p class="answer">Temperature, modelin rastgelelik seviyesini kontrol eder.<br><strong>0.1 — 0.2:</strong> Yüksek doğruluk (OCR için ideal)<br><strong>0.3 — 0.5:</strong> Dengeli<br><strong>0.7+:</strong> Daha yaratıcı, daha az tutarlı sonuçlar<br>Varsayılan <code>0.2</code> fatura okuma için idealdir.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>📏 Context pencresi ne kadar?</h4>
+                            <p class="answer">Varsayılan olarak <code>--n-predict 2048</code> (2048 token). Büyük faturalar için artırılabilir: <code>--n-predict 4096</code>. Ancak daha yüksek değerler işlem süresini artırır.</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="faq-section">
+                    <h2><span class="title-glow">Sorun Giderme</span><span class="subtitle">Troubleshooting</span></h2>
+                    <div class="faq-grid">
+                        <article class="faq-card">
+                            <h4>❌ "llama-cli bulunamadı" hatası</h4>
+                            <p class="answer"><code>llama-cli.exe</code> dosyasını sistem PATH'inize ekleyin. Örnek: <br><code>mkdir -p "C:\Users\%USER%\AppData\Roaming\Fatrocu\bin"</code><br><code>copy "C:\Program Files\Python311\Lib\site-packages\llama_cli\llama-cli.exe" "C:\Users\%USER%\AppData\Roaming\Fatrocu\bin"</code><br><code>setx PATH "%PATH%;C:\Users\%USER%\AppData\Roaming\Fatrocu\bin"</code></p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>❌ "Model bulunamadı" hatası</h4>
+                            <p class="answer">Model dosyasını indirin: <code>fatrocu models --download ImajeV-2B-Q8_0</code>. Veya model dosyasını manuel olarak <code>%APPDATA%\Fatrocu\models\</code> dizinine kopyalayın.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>❌ "Model dosyası bulunamadı" hatası</h4>
+                            <p class="answer">Model dosyasının yolunu kontrol edin. <code>FATROCU_MODEL_PATH</code> ortam değişkenini kullanarak özelleştirin: <code>setx FATROCU_MODEL_PATH "C:\models\imajeV.gguf"</code></p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>❌ "JSON parse error" hatası</h4>
+                            <p class="answer">ImajeV modelinin çıktısında JSON dışında metin varsa, <code>--temp 0.1</code> ile temperature'ı düşürün. Ayrıca <code>--system-prompt</code> ile özelleştirilmiş sistem prompt kullanabilirsiniz.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>❌ "GPU katmanları yüklenmedi"</h4>
+                            <p class="answer">CUDA kurulu olduğundan emin olun. NVIDIA sürücülerini güncelleyin. <code>--gpu-layers 45</code> ile katman sayısını ayarlayın. Eğer GPU bulunamazsa, program otomatik olarak CPU'ya geçiş yapar.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>❌ PDF'ler işlenmiyor</h4>
+                            <p class="answer">PDF'ler otomatik olarak sayfalarına ayrıştırılır. Her sayfa ayrı ayrı işlenir. Çok büyük PDF'ler (20+ sayfa) için, önce PDF'yi PDF24 Tools ile daha küçük parçalara ayırmayı deneyin.</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="faq-section">
+                    <h2><span class="title-glow">Özellikler & Sınırlamalar</span><span class="subtitle">Features & Limitations</span></h2>
+                    <div class="faq-grid">
+                        <article class="faq-card">
+                            <h4>✅ Desteklenen formatlar</h4>
+                            <p class="answer">PDF, PNG, JPG, JPEG, TIFF, BMP. PDF'ler otomatik sayfa sayısına göre işlenir. Görsel kalitesi düşük (300 DPI'den daha düşük) faturalar için önce görüntüyü artırmayı deneyin.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>✅ Çıkan alanlar</h4>
+                            <p class="answer">cari_unvan (şirket adı), cari_vergi_no (VKN), fatura_no, fatura_tarihi, ettn_uuid, mal_hizmet_toplam_matrah, kdv_orani, kdv_tutari, genel_toplam, kalemler (satır başına ürün adı, miktar, birim fiyat, toplam).</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>✅ Dışa aktarma formatları</h4>
+                            <p class="answer">Excel (.xlsx), CSV (.csv), JSON (.json). Excel dosyaları her sayfa için ayrı bir tablo içerir.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>⚠️ Sınırlamalar</h4>
+                            <p class="answer">Çok karmaşık faturalar (çok sayıda sayfa, çok sayıda satır) için performansı düşebilir. Çok küçük metinler (10px'den küçük fontlar) okunmayabilir. Çok düşük kalite (600 DPI'den düşük) PDF'ler hatalı sonuçlar verebilir. Çok bulanık veya kırık faturalar okunamayabilir.</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="faq-section">
+                    <h2><span class="title-glow">Geliştirme & Katkı</span><span class="subtitle">Development & Contributing</span></h2>
+                    <div class="faq-grid">
+                        <article class="faq-card">
+                            <h4>🔧 Kaynak kodu nerede?</h4>
+                            <p class="answer">[GitHub'dan klonlayın](https://github.com/Nec0ti/Fatrocu). Rust ile yazılmıştır — <code>cargo build --release</code> ile derleyebilirsiniz.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>🐛 Hata bildirmek istersem?</h4>
+                            <p class="answer">GitHub Issues'dan [hata bildirimleri](https://github.com/Nec0ti/Fatrocu/issues) açabilirsiniz. Lütfen hata bildirimlerinde: Rust sürümü, model adı, işletim sistemi, Python sürümü, ve hatanın tam mesajını paylaşın.</p>
+                        </article>
+                        <article class="faq-card">
+                            <h4>📝 Kendi modeli kullanmak istersem?</h4>
+                            <p class="answer">Evet! <code>fatrocu models --import ./model.gguf</code> ile kendi GGUF modelinizi yükleyebilirsiniz. Veya doğrudan <code>--model-path</code> ile özelleştirilmiş bir model kullanabilirsiniz.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <div class="logo-small">
+                        <svg width="32" height="32" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="48" fill="url(#grad1)" opacity="0.15"/>
+                            <circle cx="50" cy="50" r="45" fill="url(#grad2)" opacity="0.3"/>
+                            <path d="M30 50 L45 50 L42 62 L33 48 L20 56 L30 50 Z" fill="url(#grad3)"/>
+                        </svg>
+                    </div>
+                    <p>Fatrocu CLI v3.1.0 &copy; 2024 Nec0ti</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Linkler</h4>
+                    <ul>
+                        <li><a href="https://github.com/Nec0ti/Fatrocu">GitHub</a></li>
+                        <li><a href="https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct">Model Repo</a></li>
+                        <li><a href="https://github.com/Nec0ti/Fatrocu/issues">Hata Bildir</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>İletişim</h4>
+                    <ul>
+                        <li>📧 nec0ti@proton.me</li>
+                        <li>📱 @nec0ti</li>
+                        <li>🌐 github.com/Nec0ti</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+
+        <div class="floating-badge" title="ImajeV-2B-Q8_0">
+            <span class="badge-icon">🤖</span>
+            <span class="badge-text">ImajeV-2B-Q8_0</span>
+            <div class="badge-status online">● Aktif</div>
+        </div>
+    </div>
+
+    <script>
+        const particles = document.querySelector('.particles');
+        const particleCount = 30;
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.cssText = `
+                left: ${Math.random() * 100}vw;
+                bottom: ${Math.random() * 100}vh;
+                animation-delay: ${Math.random() * 5}s;
+                animation-duration: ${3 + Math.random() * 7}s;
+                animation-iteration-count: infinite;
+            `;
+            particles.appendChild(particle);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.faq-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
