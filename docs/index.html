@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Fatrocu CLI — ImajeV-2B-Q8_0 ile fatura işleme. OCR + alan çıkarma tek modelde.">
-    <meta name="theme-color" content="#0f0f1a">
-    <title>Fatrocu CLI v3.1 — Dokümantasyon</title>
+    <meta name="description" content="Fatrocu CLI — İmajeV-2B-Q8_0 ile fatura işleme. OCR + alan çıkarma tek modelde.">
+    <meta name="theme-color" content="#f8f7f2">
+    <title>Fatrocu CLI v3.1.0 — Dokümantasyon</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='%2300ff88'%3E✦%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='%233b3b3b' font-family='monospace'%3E✦%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <div class="app">
-        <!-- Animated Background -->
-        <div class="bg-gradient"></div>
-        <div class="bg-grid"></div>
+        <!-- Scribble Background Elements -->
+        <div class="bg-scribble-grid"></div>
+        <div class="bg-scribble-doodles"></div>
+        <div class="bg-paper-texture"></div>
         <div class="particles" aria-hidden="true"></div>
 
         <!-- Header / Hero -->
@@ -22,23 +23,10 @@
                 <div class="logo-container">
                     <div class="logo-glow">
                         <svg width="64" height="64" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="50" r="48" fill="url(#grad1)" opacity="0.15"/>
-                            <circle cx="50" cy="50" r="45" fill="url(#grad2)" opacity="0.3"/>
-                            <path d="M30 50 L45 50 L42 62 L33 48 L20 56 L30 50 Z" fill="url(#grad3)"/>
-                            <defs>
-                                <linearGradient id="grad1" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0%" stop-color="#00ff88"/>
-                                    <stop offset="100%" stop-color="#00d4ff"/>
-                                </linearGradient>
-                                <linearGradient id="grad2" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0%" stop-color="#00d4ff"/>
-                                    <stop offset="100%" stop-color="#ff0080"/>
-                                </linearGradient>
-                                <linearGradient id="grad3" x1="30" y1="48" x2="45" y2="62" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0%" stop-color="#00ff88"/>
-                                    <stop offset="100%" stop-color="#00d4ff"/>
-                                </linearGradient>
-                            </defs>
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="#d4d4d4" stroke-width="1" stroke-dasharray="4 2"/>
+                            <circle cx="50" cy="50" r="42" fill="none" stroke="#a8a8a8" stroke-width="1" stroke-dasharray="2 2"/>
+                            <path d="M32 48 L45 48 L43 58 L35 46 L23 52 L32 48 Z" fill="#3b3b3b" stroke="#3b3b3b" stroke-width="1" stroke-dasharray="2 1"/>
+                            <circle cx="50" cy="50" r="12" fill="#f8f7f2" stroke="#d4d4d4" stroke-width="1" stroke-dasharray="3 2"/>
                         </svg>
                     </div>
                     <div class="logo-text">
@@ -48,7 +36,7 @@
                 </div>
                 <p class="hero-description">
                     İmajeV-2B-Q8_0 ile güçlendirilmiş, tamamen yerel çalışan fatura işleme aracı.
-                    OCR ve alan çıkarma tek bir model çağrısında.
+                    OCR + alan çıkarma tek bir model çağrısında.
                 </p>
                 <div class="hero-actions">
                     <a href="#installation" class="btn btn-primary">Hemen Başla</a>
@@ -60,9 +48,7 @@
         <!-- Features Section -->
         <section class="section features" id="features">
             <div class="section-container">
-                <h2 class="section-title">
-                    <span class="title-glow">Özellikler</span>
-                </h2>
+                <h2 class="section-title">Özellikler</h2>
                 <div class="features-grid">
                     <article class="card feature-card">
                         <div class="card-icon">⚡</div>
@@ -76,13 +62,13 @@
                     </article>
                     <article class="card feature-card">
                         <div class="card-icon">🤖</div>
-                        <h3>ImajeV-2B-Q8_0</h3>
+                        <h3>İmajeV-2B-Q8_0</h3>
                         <p>2 milyar parametreli, hafif ve güçlü bir görsel-dil modelü. OCR + çıkarma tek adımda.</p>
                     </article>
                     <article class="card feature-card">
                         <div class="card-icon">📄</div>
                         <h3>PDF &amp; Görsel</h3>
-                        <p>PDF, PNG, JPG, TIFF formatları desteklenir. Otomatik sayfa ayrıştırma.</p>
+                        <p>PDF, PNG, JPG, TIFF, BMP formatları desteklenir. Otomatik sayfa ayrıştırma.</p>
                     </article>
                     <article class="card feature-card">
                         <div class="card-icon">📊</div>
@@ -107,7 +93,7 @@
                         <div class="step-number">1</div>
                         <h3>Prerequisites</h3>
                         <ul>
-                            <li>Windows 10/11 x64</li>
+                            <li>Windows 10/11 x64, Linux, macOS</li>
                             <li>Python 3.10+</li>
                             <li>Git Bash veya PowerShell</li>
                             <li>7-8 GB boş disk alanı</li>
@@ -233,7 +219,7 @@
     --threads 4 \
     --gpu-layers 0</code></pre>
                         <p class="api-desc">
-                            Bir fatura görseli veya PDF'yi işler. ImajeV-2B-Q8_0 modeli
+                            Bir fatura görseli veya PDF'yi işler. İmajeV-2B-Q8_0 modeli
                             kullanılarak OCR ve alan çıkarma yapılır. Sonuç JSON olarak
                             kaydedilir.
                         </p>
@@ -303,7 +289,7 @@
                     </article>
                     <article class="faq-card">
                         <h4>Ne kadar disk alanı gerekir?</h4>
-                        <p>ImajeV-2B-Q8_0 için ~7 GB. Gemma 4 E4B için ~4.8 GB, E2B için ~2.8 GB.</p>
+                        <p>İmajeV-2B-Q8_0 için ~7 GB. Gemma 4 E4B için ~4.8 GB, E2B için ~2.8 GB.</p>
                     </article>
                     <article class="faq-card">
                         <h4>Hangi dosya formatlarını kabul ediyorsunuz?</h4>
@@ -311,7 +297,7 @@
                     </article>
                     <article class="faq-card">
                         <h4>GPU kullanımı nasıl ayarlanır?</h4>
-                        <p><code>--gpu-layers N</code> ile GPU katmanlarını ayarlayabilirsiniz. 24 GB VRAM için ~45 katman önerilir.</p>
+                        <p><code>--gpu-layers N</code> ile GPU katmanlarını ayarlayabilirsiniz. 24 GB VRAM için önerilen: <code>--gpu-layers 45</code></p>
                     </article>
                     <article class="faq-card">
                         <h4>Hangi GPU'lar destekleniyor?</h4>
@@ -334,12 +320,13 @@ pip install excelize python-dateutil python-dotenv</code></pre>
                 <div class="footer-section">
                     <div class="logo-small">
                         <svg width="32" height="32" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="48" fill="url(#grad1)" opacity="0.15"/>
-                            <circle cx="50" cy="50" r="45" fill="url(#grad2)" opacity="0.3"/>
-                            <path d="M30 50 L45 50 L42 62 L33 48 L20 56 L30 50 Z" fill="url(#grad3)"/>
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="#d4d4d4" stroke-width="1" stroke-dasharray="4 2"/>
+                            <circle cx="50" cy="50" r="42" fill="none" stroke="#a8a8a8" stroke-width="1" stroke-dasharray="2 2"/>
+                            <path d="M30 50 L45 50 L42 62 L33 48 L20 56 L30 50 Z" fill="#3b3b3b" stroke="#3b3b3b" stroke-width="1" stroke-dasharray="2 1"/>
+                            <circle cx="50" cy="50" r="12" fill="#f8f7f2" stroke="#d4d4d4" stroke-width="1" stroke-dasharray="3 2"/>
                         </svg>
                     </div>
-                    <p>Fatrocu CLI v3.1.0 &copy; 2024 Nec0ti</p>
+                    <p>Fatrocu CLI v3.1.0 © 2026 Nec0ti</p>
                 </div>
                 <div class="footer-section">
                     <h4>Linkler</h4>
@@ -361,9 +348,9 @@ pip install excelize python-dateutil python-dotenv</code></pre>
         </footer>
 
         <!-- Decorative Elements -->
-        <div class="floating-badge" title="ImajeV-2B-Q8_0">
+        <div class="floating-badge" title="İmajeV-2B-Q8_0">
             <span class="badge-icon">🤖</span>
-            <span class="badge-text">ImajeV-2B-Q8_0</span>
+            <span class="badge-text">İmajeV-2B-Q8_0</span>
             <div class="badge-status online">● Aktif</div>
         </div>
     </div>
