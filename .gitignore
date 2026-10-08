@@ -44,3 +44,7 @@ $RECYCLE.BIN/
 *.tmp
 *.temp
 DOCS_SUMMARY.md
+
+
+
+.pi/
