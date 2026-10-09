@@ -1,45 +1,88 @@
 # Fatrocu
 
-Fatrocu is a fully local, privacy‑preserving invoice processing system consisting of a desktop GUI, a command‑line tool, and a lightweight HTTP server. All components use the Moondream 3.1‑9B‑A2B model and run entirely on the host machine.
+Fatrocu is a fully **local, privacy-preserving** Turkish invoice-processing platform. It turns PDFs and images into structured invoices (fatura numarası, tarih, cari, KDV kalemleri, genel toplam) and runs **entirely on the host machine** — no invoice data ever leaves the computer.
 
-## Components
+Fatrocu ships as three cooperating components:
 
-- **Desktop application** – Windows, macOS, Linux GUI for interactive processing.
-- **CLI tool** – Command‑line interface for automation and scripting.
-- **Server** – HTTP service exposing a  endpoint for remote integration.
+| Component | Repo | Stack | Purpose |
+| --- | --- | --- | --- |
+| **Desktop app** | [`Fatrocu/Fatrocu`](https://github.com/Fatrocu/Fatrocu) | Tauri · React · TypeScript · Vite | Interactive Windows / macOS / Linux GUI |
+| **CLI** | [`Fatrocu/fatrocu-cli`](https://github.com/Fatrocu/fatrocu-cli) | Rust | Headless automation & scripting |
+| **Server** | [`Fatrocu/fatrocu-server`](https://github.com/Fatrocu/fatrocu-server) | Rust · actix-web | HTTP API for remote integration |
+| **Organization** | [`Fatrocu/.github`](https://github.com/Fatrocu/.github) | — | Org profile & shared docs |
+
+## How it works
+
+```
+invoice image / PDF
+        │
+   1. OCR → markdown (text layer)
+        │
+   2. İmajeV-2B-Q8_0 (vision LLM) extracts structured fields
+        │
+   3. Invoice saved locally (JSON / Excel / CSV)
+```
+
+- **Single unified model:** [`İmajeV-2B-Q8_0`](https://huggingface.co/cjhb/llama-cli-windows) (`İmajeV-2B-Q8_0.gguf`). This is the canonical model across every Fatrocu component.
+- **Fully offline** once the model is downloaded — no network calls required at processing time.
 
 ## Features
 
-- Process PDF and image invoices locally.
-- Export results to Excel or CSV.
-- No data leaves the computer.
-- Single model architecture (Moondream 3.1‑9B‑A2B).
+- Process **PDF and image** invoices on CPU or GPU.
+- Export results to **Excel (`.xlsx`)**, CSV, or JSON.
+- **No data leaves the machine.** All models and files stay local.
+- **Desktop GUI** with an upload → review → approved workflow.
+- **CLI** for automation, and an **HTTP server** for headless / remote use.
 
-## Installation
+## Requirements
 
+- Rust (stable)
+- For the desktop app additionally: Node.js 20+
+- Windows, macOS, or Linux
 
-> fatrocu-desktop@3.1.0 tauri
-> tauri build
+## Install & build
 
+### Desktop app
 
-> fatrocu-desktop@3.1.0 build
-> tsc && vite build
+```bash
+# install toolchain
+npm install
 
-src/App.tsx(11,73): error TS2305: Module '"./types"' has no exported member 'GemmaVariant'.
-src/App.tsx(20,3): error TS2353: Object literal may only specify known properties, and 'threads' does not exist in type 'AppSettings'.
-src/App.tsx(180,9): error TS2322: Type '{ currentPage: any; setCurrentPage: (p: Page) => void; pendingCount: number; approvedCount: number; modelStatus: ModelStatus | null; modelName: string; }' is not assignable to type 'IntrinsicAttributes & HeaderProps'.
-  Property 'modelName' does not exist on type 'IntrinsicAttributes & HeaderProps'.
-src/components/Header.tsx(106,28): error TS2538: Type 'undefined' cannot be used as an index type.
-src/pages/SettingsPage.tsx(2,64): error TS2305: Module '"../types"' has no exported member 'GemmaVariant'.
-src/services/tauriService.ts(14,3): error TS2305: Module '"../types"' has no exported member 'GemmaVariant'.
-src/types.ts(71,7): error TS2304: Cannot find name 'GemmaVariant'.
-src/types.ts(92,3): error TS2300: Duplicate identifier 'extractionModelId'.
-src/types.ts(92,3): error TS2687: All declarations of 'extractionModelId' must have identical modifiers.
-src/types.ts(101,3): error TS2300: Duplicate identifier 'extractionModelId'.
-src/types.ts(101,3): error TS2687: All declarations of 'extractionModelId' must have identical modifiers.
-src/types.ts(101,3): error TS2717: Subsequent property declarations must have the same type.  Property 'extractionModelId' must be of type 'ModelVariant', but here has type 'ModelVariant | undefined'.
+# type-check + production build (frontend)
+npm run build
 
-## Documentation
+# full Tauri build (bundles the app)
+npm run tauri
+```
 
-Full documentation is available at https://nec0ti.github.io/Fatrocu.
+### CLI
 
+```bash
+# install Rust toolchain
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+
+# compile (debug)
+cargo build
+
+# compile (release)
+cargo build --release
+```
+
+### Server
+
+```bash
+cargo build --release
+# then run the binary (see fatrocu-server/README.md)
+```
+
+## Repository map
+
+- [`Fatrocu/Fatrocu`](https://github.com/Fatrocu/Fatrocu) — desktop application (this repo)
+- [`Fatrocu/fatrocu-cli`](https://github.com/Fatrocu/fatrocu-cli) — command-line tool
+- [`Fatrocu/fatrocu-server`](https://github.com/Fatrocu/fatrocu-server) — HTTP API server
+- [`Fatrocu/.github`](https://github.com/Fatrocu/.github) — organization profile
+
+## License
+
+MIT
