@@ -4,9 +4,10 @@ import { ModelStatus } from '../types';
 
 // v3.1: Model name mapping for display
 const MODEL_NAMES: Record<string, string> = {
-  'Moondream 3.1-9B-A2B': 'Moondream 3.1-9B-A2B',
-  'Qwen/Qwen2.5-VL-7B-Instruct': 'Moondream 3.1-9B-A2B',
-  'Moondream': 'Moondream 3.1-9B-A2B',
+  'İmajeV-2B-Q8_0': 'İmajeV-2B-Q8_0',
+  'Moondream 3.1-9B-A2B': 'İmajeV-2B-Q8_0',
+  'Qwen/Qwen2.5-VL-7B-Instruct': 'İmajeV-2B-Q8_0',
+  'Moondream': 'İmajeV-2B-Q8_0',
 };
 
 type Page = 'upload' | 'review' | 'approved' | 'settings';
@@ -17,6 +18,7 @@ interface HeaderProps {
   pendingCount: number;
   approvedCount: number;
   modelStatus: ModelStatus | null;
+  modelName: string;
 }
 
 const NAV: { id: Page; label: string; Icon: React.ElementType }[] = [
@@ -103,7 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
               Pipeline
             </span>
             <span className="text-xs font-bold text-black block leading-tight font-heading">
-              {MODEL_NAMES[modelStatus?.modelName] ?? modelStatus?.modelName ?? 'Moondream 3.1-9B-A2B'}
+              {MODEL_NAMES[modelStatus?.modelName ?? ''] ?? modelStatus?.modelName ?? 'İmajeV-2B-Q8_0'}
             </span>
           </div>
         </div>

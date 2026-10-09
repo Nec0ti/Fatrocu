@@ -17,8 +17,15 @@ type Page = 'upload' | 'review' | 'approved' | 'settings' | 'check';
 
 const DEFAULT_SETTINGS: AppSettings = {
   modelPath: '',
-  threads: 4,
-  gpuLayers: 0,
+  modelThreads: 4,
+  modelGpuLayers: 0,
+  ocrModelPath: '',
+  ocrThreads: 4,
+  ocrGpuLayers: 0,
+  extractionModelId: 'E4B',
+  extractionModelPath: '',
+  extractionThreads: 4,
+  extractionGpuLayers: 0,
   saveProcessedFiles: true,
   defaultExportFormat: 'xlsx',
 };
@@ -33,7 +40,7 @@ export const App: React.FC = () => {
   // Model name display for status bar
   const getModelName = (status: ModelStatus | null) => {
     if (!status) return '—';
-    if (status.modelName.includes('Moondream')) return 'Moondream 3.1-9B-A2B';
+    if (status.modelName.includes('Moondream') || status.modelName.includes('İmajeV')) return 'İmajeV-2B-Q8_0';
     if (status.modelName.includes('Gemma')) return `Gemma 4 (${status.modelName.split(' ')[1]})`;
     return status.modelName;
   };

@@ -5,8 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   clearScreen: false,
-  // Remove obsolete Vite dev server config – not needed for the CLI
-  // (original lines 8‑11)
+  server: {
     port: 5173,
     strictPort: true,
   },

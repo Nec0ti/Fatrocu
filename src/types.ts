@@ -64,8 +64,9 @@ export interface ProcessedInvoice {
 }
 
 // ─── Model Management (Faz 2 ready) ─────────────────────────────────────────
-export type ModelVariant = 'E2B' | 'E4B' | '12B' | 'custom'; // Legacy / compatibility only
-export type ModelName = 'Moondream 3.1-9B-A2B'; // v3.1 default
+export type GemmaVariant = 'E2B' | 'E4B' | '12B' | 'custom'; // Gemma-4 GGUF variant ids
+export type ModelVariant = GemmaVariant;                       // alias kept for compatibility
+export type ModelName = 'İmajeV-2B-Q8_0';                     // v3.1 canonical model
 
 export interface ManagedModel {
   id: GemmaVariant | string;
@@ -98,7 +99,6 @@ export interface AppSettings {
   navidcUrl?: string;
   // v3.0 compatibility
   ocrModelId?: ModelVariant;
-  extractionModelId?: ModelVariant;
 
   // General
   saveProcessedFiles: boolean;
